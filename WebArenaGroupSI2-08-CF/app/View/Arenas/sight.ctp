@@ -11,4 +11,7 @@ echo $this->Form->create('Figherattack');
 echo $this->Form->input('direction',array('options' => array('north'=>'north','east'=>'east','south'=>'south','west'=>'west'), 'default' => 'east'));
 echo $this->Form->end('Attack');
 
+$test=$this->Session->read('Connected');
+pr($test);
+
 ?>

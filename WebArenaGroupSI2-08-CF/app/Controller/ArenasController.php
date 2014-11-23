@@ -41,9 +41,6 @@ class ArenasController extends AppController
             {
                 $processingResult=$this->Player->checkLogin($this->request->data['Connexion']['Email'],$this->request->data['Connexion']['Mot de passe']);
                 $this->Session->write('Connected', $processingResult);
-                if($this->Session->check('Connected')){pr($processingResult);}
-                $test=$this->Session->read('Connected');
-                $this->set('test', $test);
             }
         }
         $this->set('raw', $this->Player->find('all'));
