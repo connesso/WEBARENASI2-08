@@ -1,7 +1,4 @@
-<?php 
-
-//test
-
+<?php
 
 App::uses('AppController', 'Controller');
 
