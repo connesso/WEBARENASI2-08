@@ -138,7 +138,7 @@ class Fighter extends AppModel {
             'coordinate_x' => 0,
             'coordinate_x' => 0,
             'skill_sight' => 0,
-            'skill_strenght' => 1,
+            'skill_strength' => 1,
             'skill_health' => 3,
             'current_health' => 1,
             );

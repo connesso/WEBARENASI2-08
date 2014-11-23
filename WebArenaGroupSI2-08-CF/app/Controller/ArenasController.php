@@ -52,7 +52,7 @@ class ArenasController extends AppController
         {
             if (isset($this->request->data['Newfighter']))
             {
-                $this->Fighter->createNewFighter('545f827c-576c-4dc5-ab6d-27c33186dc3e', $this->request->data['Newfighter']['Nom']);
+                $this->Fighter->createNewFighter($this->Session->read('Connected'), $this->request->data['Newfighter']['Nom']);
             }
         }
     }
