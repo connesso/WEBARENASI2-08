@@ -19,6 +19,10 @@ echo $this->Form->create('Lostpassword');
 echo $this->Form->input('Email', array('type' => 'email'));
 echo $this->Form->end("Récupérer mon mot de passe");
 
+?>
+
+<p> <?php
+
 $test=$this->Session->read('Connected');
 pr($test);
-?>
+?> </p>

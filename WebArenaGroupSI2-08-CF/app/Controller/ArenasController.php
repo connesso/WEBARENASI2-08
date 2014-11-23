@@ -43,6 +43,7 @@ class ArenasController extends AppController
                 $this->Session->write('Connected', $processingResult);
             }
         }
+        
         $this->set('raw', $this->Player->find('all'));
     }
     
