@@ -51,7 +51,13 @@ class ArenasController extends AppController
     
     public function character()
     {
-        
+        if ($this->request->is('post'))
+        {
+            if (isset($this->request->data['Newfighter']))
+            {
+                $this->Fighter->createNewFighter('545f827c-576c-4dc5-ab6d-27c33186dc3e', $this->request->data['Newfighter']['Nom']);
+            }
+        }
     }
     
     public function log($msg, $type = LOG_ERR, $scope = NULL)

@@ -132,9 +132,18 @@ class Fighter extends AppModel {
     
     public function createNewFighter($playerId, $Fightername)
     {
-        $infos=array('player_id' => $playerId, 'name' =>$Fightername);
-        $this->create($infos);
-        $this->save();
+        $infos=array( 'player_id' => $playerId, 
+            'name' => $Fightername,
+            'level' => 1,
+            'coordinate_x' => 0,
+            'coordinate_x' => 0,
+            'skill_sight' => 0,
+            'skill_strenght' => 1,
+            'skill_health' => 3,
+            'current_health' => 1,
+            );
+        $this->create();
+        $this->save($infos);
     }
 
 }   
