@@ -47,6 +47,7 @@ class Player extends AppModel {
             if($play['Player']['email']==$email && $play['Player']['password']==$password)
             {
                 pr($play['Player']['email']);
+                return $play['Player']['id'];
             }
         }
     }

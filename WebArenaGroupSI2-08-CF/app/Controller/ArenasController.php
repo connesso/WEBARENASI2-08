@@ -28,7 +28,7 @@ class ArenasController extends AppController
     public function login()
     {
         
-        $processingResult = '';
+        //$processingResult = '';
         $this->Player->find('all');
         if ($this->request->is('post'))
         {
@@ -39,7 +39,11 @@ class ArenasController extends AppController
             // Is it from the form for attacking?
             if (isset($this->request->data['Connexion']))
             {
-                $this->Player->checkLogin($this->request->data['Connexion']['Email'],$this->request->data['Connexion']['Mot de passe']);
+                $processingResult=$this->Player->checkLogin($this->request->data['Connexion']['Email'],$this->request->data['Connexion']['Mot de passe']);
+                $this->Session->write('Connected', $processingResult);
+                if($this->Session->check('Connected')){pr($processingResult);}
+                $test=$this->Session->read('Connected');
+                $this->set('test', $test);
             }
         }
         $this->set('raw', $this->Player->find('all'));
@@ -91,9 +95,7 @@ public function sight()
     public function diary()
     {
         $this->set('raw',$this->Event->find());
-    }
-    
-    
+    }   
 
 }
 ?>

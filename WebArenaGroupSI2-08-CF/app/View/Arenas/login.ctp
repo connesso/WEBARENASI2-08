@@ -3,6 +3,7 @@
 <?php pr($raw); ?>
 
 <?php 
+
 echo $this->Form->create('Inscription');
 echo $this->Form->input('Email', array('type' => 'email'));
 echo $this->Form->input('Mot de passe', array('type' => 'password'));
