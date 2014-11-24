@@ -58,15 +58,6 @@ class Player extends AppModel {
             }
         }
     }
-    public function beforeFilter()
-    {
-        echo'test';
-        $this->request->params['action'];
-         if (!$isConnected AND $calledMethod != 'login') 
-         {
-            $this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
-         }
-    }
     
     
     
