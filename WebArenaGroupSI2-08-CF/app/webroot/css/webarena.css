@@ -1,21 +1,19 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 17 nov. 2014, 11:33:35
-    Author     : Vivien
-*/
+body
+{
+    margin: 0px 0px 0px 0px;
+}
+#header h1
+{
+    margin : auto;
+    
+  
+}
 #header
 {
-
-
-	
-	background-color : darkgrey; 
-	background-image:url(img/NYC1.jpg);
-	background-size : 100%;
-	height : 240px;
+    margin : 0px 0px 0px 0px;
+    background-color : rgba(24,24,24,0.1);
+    background-size : 100%;
+    height : 240px;
 }
 #header h1
 {
@@ -23,55 +21,54 @@ and open the template in the editor.
 }
 nav
 {
-    background-color: red;
-    float : left;
+    //position: fixed;
+        background-color: grey;
+    //float : left;
     
 }
-nav a 
+.button
 {
-    //float : left;
-    width : 60%;
-    display : inline-block;
-    background: #a3a6a8;
-    background-image: -webkit-linear-gradient(top, #a3a6a8, #454545);
-    background-image: -moz-linear-gradient(top, #a3a6a8, #454545);
-    background-image: -ms-linear-gradient(top, #a3a6a8, #454545);
-    background-image: -o-linear-gradient(top, #a3a6a8, #454545);
-    background-image: linear-gradient(to bottom, #a3a6a8, #454545);
-
-    font-family: Arial;
-    color: #ffffff;
-    font-size: 16px;
-    padding: 10px 50px 10px 50px;
     margin : 0px 0px 0px 0px;
-    border: solid #ffffff 1px;
-    text-decoration: none;
+    padding: 0;
+    display: inline;
 }
-/*.button
+nav a
 {
-    width : 90px;
-    height: 30px;
+    width: 157.3px;
+    
     display : inline-block;
-    background: #a3a6a8;
-    background-image: -webkit-linear-gradient(top, #a3a6a8, #454545);
-    background-image: -moz-linear-gradient(top, #a3a6a8, #454545);
-    background-image: -ms-linear-gradient(top, #a3a6a8, #454545);
-    background-image: -o-linear-gradient(top, #a3a6a8, #454545);
-    background-image: linear-gradient(to bottom, #a3a6a8, #454545);
-
+    background: #1484cf;
+    background-image: -webkit-linear-gradient(top, #1484cf, #0a2a3d);
+    background-image: -moz-linear-gradient(top, #1484cf, #0a2a3d);
+    background-image: -ms-linear-gradient(top, #1484cf, #0a2a3d);
+    background-image: -o-linear-gradient(top, #1484cf, #0a2a3d);
+    background-image: linear-gradient(to bottom, #1484cf, #0a2a3d);
     font-family: Arial;
     color: #ffffff;
-    font-size: 16px;
-    padding: auto;
-    margin : auto;
-    border: solid #ffffff 1px;
+    font-size: 20px;
+    
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+    margin-top: 2px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 2px;
+    //margin : 0;
+    border: solid #b08f0a 3px;
     text-decoration: none;
-}*/
+
+}
+
 
 nav a:hover
 {
-    background: #b3b3b3;
-    text-decoration: none;
+    background: #4fa2d6;
+  background-image: -webkit-linear-gradient(top, #4fa2d6, #274d66);
+  background-image: -moz-linear-gradient(top, #4fa2d6, #274d66);
+  background-image: -ms-linear-gradient(top, #4fa2d6, #274d66);
+  background-image: -o-linear-gradient(top, #4fa2d6, #274d66);
+  background-image: linear-gradient(to bottom, #4fa2d6, #274d66);
+  text-decoration: none;
 }
 #footer
 {
@@ -82,12 +79,13 @@ nav a:hover
 
 #container
 {
+    margin-top: 0px;
     color : black;
-    width : 60%;
+    width : 1000px;
     margin : auto; 
     background-color : white; 
 }
 html
 {
-    background-color : grey;
+    background-image : linear-gradient(to bottom, #1484cf, #0a2a3d);
 }

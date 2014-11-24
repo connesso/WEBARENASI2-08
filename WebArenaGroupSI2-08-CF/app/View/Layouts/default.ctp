@@ -36,7 +36,13 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	?>
 </head>
 <body>
-   <nav>
+   
+	<div id="container"> 
+            
+		<div id="header">
+                    <h1>Projet WebArena</h1>    
+		</div>
+                <nav>
                         
                         <div class="button"><?php echo $this->Html->link('Vision', array('controller' => 'Arenas', 'action' => 'sight')); ?></div>
                         <div class="button"><?php echo $this->Html->link('Connexion', array('controller' => 'Arenas', 'action' => 'login')); ?></div>
@@ -44,12 +50,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <div class="button"><?php echo $this->Html->link('Personnage', array('controller' => 'Arenas', 'action' => 'character')); ?></div>
                         <div class="button"><?php echo $this->Html->link('Diary', array('controller' => 'Arenas', 'action' => 'diary')); ?></div>
                         <div class="button"><?php echo $this->Html->link('Log', array('controller' => 'Arenas', 'action' => 'log')); ?></div>
-            </nav>
-	<div id="container"> 
-            
-		<div id="header">
-                    <h1>Projet WebArena</h1>    
-		</div>
+                </nav>
 		<div id="content">
 
 			<?php echo $this->Session->flash(); ?>
