@@ -12,7 +12,18 @@ App::uses('AppController', 'Controller');
 //A COMMENTER 
 
 class ArenasController extends AppController
-{
+{   
+    public function beforeFilter()
+    {
+
+            if ($this->Session->read('Connected') == null AND $this->request->params['action'] != 'login') 
+            {
+                $this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
+            }
+        }
+        
+
+
      public $uses = array('Player', 'Fighter', 'Event');
 
     /**
@@ -22,7 +33,7 @@ class ArenasController extends AppController
      */
     public function index()
     {
-        
+        $this->Session->write('Connected', null);
     }
     
     public function login()
@@ -65,6 +76,8 @@ class ArenasController extends AppController
     
 public function sight()
     {
+        
+        
         // form processing 
         $processingResult = '';
         $this->Fighter->find('all');
@@ -100,6 +113,10 @@ public function sight()
     {
         $this->set('raw',$this->Event->find());
     }   
+    
+   
+    
+    
 
 }
 ?>

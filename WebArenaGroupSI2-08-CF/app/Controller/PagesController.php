@@ -35,6 +35,7 @@ class PagesController extends AppController {
  *
  * @var array
  */
+    
 	public $uses = array();
 
 /**
@@ -74,4 +75,10 @@ class PagesController extends AppController {
 			throw new NotFoundException();
 		}
 	}
+        
+        public function beforeFilter()
+    {
+        echo 'Salut ksdqesb lqgus';
+
+    }
 }
