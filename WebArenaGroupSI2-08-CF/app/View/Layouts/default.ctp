@@ -22,13 +22,13 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php echo $cakeDescription ?>:
-		<?php echo $this->fetch('title'); ?>
+                <?php  echo $title_for_layout ?>
+                
 	</title>
 	<?php
 		echo $this->Html->meta('icon');
 
-		echo $this->Html->css('cake.generic');
+		echo $this->Html->css('webarena');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -36,14 +36,19 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	?>
 </head>
 <body>
-	<div id="container">
+   <nav>
+                        
+                        <div class="button"><?php echo $this->Html->link('Vision', array('controller' => 'Arenas', 'action' => 'sight')); ?></div>
+                        <div class="button"><?php echo $this->Html->link('Connexion', array('controller' => 'Arenas', 'action' => 'login')); ?></div>
+                        <div class="button"><?php echo $this->Html->link('Menu', array('controller' => 'Arenas', 'action' => '/')); ?></div>
+                        <div class="button"><?php echo $this->Html->link('Personnage', array('controller' => 'Arenas', 'action' => 'character')); ?></div>
+                        <div class="button"><?php echo $this->Html->link('Diary', array('controller' => 'Arenas', 'action' => 'diary')); ?></div>
+                        <div class="button"><?php echo $this->Html->link('Log', array('controller' => 'Arenas', 'action' => 'log')); ?></div>
+            </nav>
+	<div id="container"> 
+            
 		<div id="header">
-                        <?php echo $this->Html->link('Vision', array('controller' => 'Arenas', 'action' => 'sight')); ?>
-                        <?php echo $this->Html->link('Connexion', array('controller' => 'Arenas', 'action' => 'login')); ?>
-                        <?php echo $this->Html->link('Menu', array('controller' => 'Arenas', 'action' => '/')); ?>
-                        <?php echo $this->Html->link('Personnage', array('controller' => 'Arenas', 'action' => 'character')); ?>
-                        <?php echo $this->Html->link('Diary', array('controller' => 'Arenas', 'action' => 'diary')); ?>
-                        <?php echo $this->Html->link('Log', array('controller' => 'Arenas', 'action' => 'log')); ?>
+                    <h1>Projet WebArena</h1>    
 		</div>
 		<div id="content">
 
@@ -54,12 +59,17 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<div id="footer">
                     
                     <p>
+                        
 			<?php echo("WebArenaGoupSI2-08-CF");?>
 		    </p>
                     
                     <p>
 			<?php echo("Brunel Vivien Connesson Rémi Grondin Lionel");?>
 		    </p>
+                    
+                    <p>
+                        <a href = "https://docs.google.com/document/d/1lA-iU6TGZCiYtuwtMvjqqAeuIUpU5vdfRisRhGf6TrU/edit?usp=sharing">Notre fichier Git</a>
+                    </p>
                     
                     <p>
 				<?php echo $cakeVersion; ?>
