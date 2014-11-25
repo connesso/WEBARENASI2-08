@@ -20,7 +20,7 @@ class ArenasController extends AppController
             {
                 $this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
             }
-        }
+    }
         
 
 
