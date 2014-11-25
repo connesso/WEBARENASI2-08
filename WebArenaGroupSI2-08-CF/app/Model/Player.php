@@ -46,27 +46,12 @@ class Player extends AppModel {
         {
             
             if ($play['Player']['email'] == $email && $play['Player']['password'] == $password) {
-                echo ' ok';
-                return $play['Player']['id'];
-                
+                return $play['Player']['id'];  
             } 
-            
-            else 
-            {
-                echo 'pas ok';
-                
-            }
+
         }
     }
-    public function beforeFilter()
-    {
-        echo'test';
-        $this->request->params['action'];
-         if (!$isConnected AND $calledMethod != 'login') 
-         {
-            $this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
-         }
-    }
+ 
     
     
     

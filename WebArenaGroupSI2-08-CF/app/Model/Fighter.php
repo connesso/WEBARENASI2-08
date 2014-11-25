@@ -145,6 +145,9 @@ class Fighter extends AppModel {
         $this->create();
         $this->save($infos);
     }
+    
+
+    
 
 }   
 

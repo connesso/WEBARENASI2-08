@@ -43,12 +43,23 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <h1>Projet WebArena</h1>    
 		</div>
                 <nav>
+                        <?php 
+                        $valeur;
+                        if($this->Session->read('Connected') == null)
+                        {
+                            $valeur='Connexion';   
+                        }
+                        else 
+                            {$valeur='Deconnexion';}
+                        ?>
+                    
+                        <div class="button"><?php echo $this->Html->link('Acceuil', array('controller' => 'Arenas', 'action' => '/')); ?></div>
+                        <div class="button"><?php echo $this->Html->link($valeur, array('controller' => 'Arenas', 'action' => 'login')); ?></div>
+                        <div class="button"><?php echo $this->Html->link('Combat', array('controller' => 'Arenas', 'action' => 'sight')); ?></div>
                         
-                        <div class="button"><?php echo $this->Html->link('Vision', array('controller' => 'Arenas', 'action' => 'sight')); ?></div>
-                        <div class="button"><?php echo $this->Html->link('Connexion', array('controller' => 'Arenas', 'action' => 'login')); ?></div>
-                        <div class="button"><?php echo $this->Html->link('Menu', array('controller' => 'Arenas', 'action' => '/')); ?></div>
+                        
                         <div class="button"><?php echo $this->Html->link('Personnage', array('controller' => 'Arenas', 'action' => 'character')); ?></div>
-                        <div class="button"><?php echo $this->Html->link('Diary', array('controller' => 'Arenas', 'action' => 'diary')); ?></div>
+                        <div class="button"><?php echo $this->Html->link('Journal', array('controller' => 'Arenas', 'action' => 'diary')); ?></div>
                         <div class="button"><?php echo $this->Html->link('Log', array('controller' => 'Arenas', 'action' => 'log')); ?></div>
                 </nav>
 		<div id="content">

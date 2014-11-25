@@ -16,7 +16,7 @@ class ArenasController extends AppController
     public function beforeFilter()
     {
 
-            if ($this->Session->read('Connected') == null AND $this->request->params['action'] != 'login') 
+            if ($this->Session->read('Connected') == null AND ($this->request->params['action'] != 'login' AND $this->request->params['action'] != 'index')) 
             {
                 $this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
             }
@@ -24,7 +24,7 @@ class ArenasController extends AppController
         
 
 
-     public $uses = array('Player', 'Fighter', 'Event');
+     public $uses = array('Player', 'Fighter', 'Event','Sight');
 
     /**
      * index method : first page
@@ -33,14 +33,14 @@ class ArenasController extends AppController
      */
     public function index()
     {
-        $this->Session->write('Connected', null);
+        
     }
     
     public function login()
     {
         
         //$processingResult = '';
-        $this->Player->find('all');
+        $this->Fighter->find('all');
         if ($this->request->is('post'))
         {
             if (isset($this->request->data['Inscription']))
@@ -52,6 +52,13 @@ class ArenasController extends AppController
             {
                 $processingResult=$this->Player->checkLogin($this->request->data['Connexion']['Email'],$this->request->data['Connexion']['Mot de passe']);
                 $this->Session->write('Connected', $processingResult);
+            }
+            if (isset($this->request->data['Deconnexion']))
+            {
+
+                $this->Session->delete('Connected');
+                //$this->Session->write('Connected', null);
+                //$this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
             }
         }
         
@@ -67,6 +74,7 @@ class ArenasController extends AppController
                 $this->Fighter->createNewFighter($this->Session->read('Connected'), $this->request->data['Newfighter']['Nom']);
             }
         }
+        $this->set('raw', $this->Fighter->find('all'));
     }
     
     public function log($msg, $type = LOG_ERR, $scope = NULL)
@@ -79,6 +87,7 @@ public function sight()
         
         
         // form processing 
+        //$this->Sight->tableau();
         $processingResult = '';
         $this->Fighter->find('all');
         // Does it come from a from (with a post method) ?
@@ -90,8 +99,16 @@ public function sight()
             if (isset($this->request->data['Fightermove']))
             {
                 $processingResult = $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
-                if($processingResult){$this->Session->setFlash('Déplacement réalisé');}
-                else $this->Session->setFlash('Mouvement impossible');
+                if($processingResult)
+                {
+                    $this->Session->setFlash('Déplacement réalisé');
+                    
+                }
+                else 
+                {
+                    $this->Session->setFlash('Mouvement impossible');
+                }
+                
             }
             // Is it from the form for attacking?
             if (isset($this->request->data['Figherattack']))
@@ -100,8 +117,12 @@ public function sight()
                 if($processingResult){$this->Session->setFlash('Attaque réalisée');}
                 else $this->Session->setFlash('Attaque impossible');
             }
+            
+            
         }
-
+        //$this->Sight->remplir_tableau();
+        //Modifier le plateau de jeu
+        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all')));
         
 
         $this->set('processingResult', $processingResult);
