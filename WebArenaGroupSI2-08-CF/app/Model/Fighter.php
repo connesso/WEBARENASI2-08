@@ -285,14 +285,14 @@ class Fighter extends AppModel {
         // @ TODO : HYPER IMPORTANT VERIFIER QUE LE JOUEUR N'A PLUS DE PERSONNAGE DE DISPO (ALL DEAD).
         $infos=array( 'player_id' => $playerId,
             'name' => $Fightername,
-            'level' => 0, // VALEUR A 0 => PERSONNAGE NON INSERE DANS LARENE
-            'xp' => 0, //BASIC VALUE
-            'coordinate_x' => -1, // VALEUR NEGATIVE = PERSO HORS JEU
-            'coordinate_y' => -1, // VALEUR NEGATIVE = PErso HORS JEU
-            'skill_sight' => 0, // BASIC VALUE
-            'skill_strength' => 1, // BASIC VALUE
-            'skill_health' => 3, // BASIC VALUE
-            'current_health' => 3, // SI = 0 ALORS PERSO MORT
+            //'level' => 1, // VALEUR A 0 => PERSONNAGE NON INSERE DANS LARENE
+            //'xp' => 1, //BASIC VALUE
+            //'coordinate_x' => 0, // VALEUR NEGATIVE = PERSO HORS JEU
+            //'coordinate_y' => 0, // VALEUR NEGATIVE = PErso HORS JEU
+            //'skill_sight' => 0, // BASIC VALUE
+            //'skill_strength' => 1, // BASIC VALUE
+            //'skill_health' => 3, // BASIC VALUE
+            //'current_health' => 3, // SI = 0 ALORS PERSO MORT
         );
         $this->create();
         $this->save($infos);

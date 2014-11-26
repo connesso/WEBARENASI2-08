@@ -63,6 +63,7 @@ class ArenasController extends AppController
         }
         
         $this->set('raw', $this->Player->find('all'));
+        $this->set('test', $this->Session->read('Connected'));
     }
     
     public function character()
@@ -71,7 +72,7 @@ class ArenasController extends AppController
         {
             if (isset($this->request->data['Newfighter']))
             {
-                $this->Fighter->createNewFighter($this->Session->read('Connected'), $this->request->data['Newfighter']['Nom']);
+                $this->Fighter->createNew($this->Session->read('Connected'), $this->request->data['Newfighter']['Nom']);
             }
         }
         $this->set('raw', $this->Fighter->find('all'));
