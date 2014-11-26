@@ -297,6 +297,9 @@ class Fighter extends AppModel {
         $this->create();
         $this->save($infos);
     }
+    
+
+    
 
     /**
      *  Insert un personnage tout juste créé dans l'arène.
