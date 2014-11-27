@@ -43,6 +43,9 @@ class Fighter extends AppModel {
          * puis Déplacement
          *
          */
+        /**
+         * @ TODO : Tester la présence de piège obstacle et monstre.
+         */
         if ($direction == 'north'){ //TEST1
             if($positionEnnemy['north']==null){ //TEST2
                 if($datas['Fighter']['coordinate_y'] != 9) { //TEST3
@@ -155,19 +158,28 @@ class Fighter extends AppModel {
 
             if($pointdevie > 0) { // COUP NORMAL
                 $this->set('current_health', $pointdevie);
+                $this->save();
                 $killingshot = false;
             } else { // KILLING SHOT ça pisse le sang ma gueule
-                $this->set('current_health', 0); // Il EST MORT
-                $this->set('coordinate_x', -1); // DONC ON L'ENVOIE AU PARADIS (HORS JEU)
-                $this->set('coordinate_y', -1); // (-1;-1) est la coordonnée du paradis.
+
+                $this->kill($enemyId);
                 $killingshot = true;
             }
 
-            $this->save();
+
 
             return $killingshot ; // Sert au calcul des points d'expriences dans doattack().
     }
 
+    function kill($fighterId)
+    {
+        //@ TODO: Check l'iD
+        $datas = $this->read(null, $fighterId);
+        $this->set('current_health', 0); // Il EST MORT
+        $this->set('coordinate_x', -1); // DONC ON L'ENVOIE AU PARADIS (HORS JEU)
+        $this->set('coordinate_y', -1); // (-1;-1) est la coordonnée du paradis.
+        $this->save();
+    }
 
 
     function getPositionEnnemy($notreId)
@@ -272,6 +284,7 @@ class Fighter extends AppModel {
         }
     }
 
+
     /**
      * Créé un nouveau joueur mais ne l'insère pas dans l'arène.
      * @param array|bool $playerId
@@ -285,8 +298,8 @@ class Fighter extends AppModel {
         // @ TODO : HYPER IMPORTANT VERIFIER QUE LE JOUEUR N'A PLUS DE PERSONNAGE DE DISPO (ALL DEAD).
         $infos=array( 'player_id' => $playerId,
             'name' => $Fightername,
-            'level' => 1, // VALEUR A 0 => PERSONNAGE NON INSERE DANS LARENE
-            'xp' => 1, //BASIC VALUE
+            'level' => 0, // VALEUR A 0 => PERSONNAGE NON INSERE DANS LARENE
+            'xp' => 0, //BASIC VALUE
             'coordinate_x' => -1, // VALEUR NEGATIVE = PERSO HORS JEU
             'coordinate_y' => -1, // VALEUR NEGATIVE = PErso HORS JEU
             'skill_sight' => 0, // BASIC VALUE
@@ -294,12 +307,10 @@ class Fighter extends AppModel {
             'skill_health' => 3, // BASIC VALUE
             'current_health' => 3, // SI = 0 ALORS PERSO MORT
         );
+        //@todo : INSERER UN TIMESTAMP : 00000000000.
         $this->create();
         $this->save($infos);
     }
-    
-
-    
 
     /**
      *  Insert un personnage tout juste créé dans l'arène.
@@ -331,12 +342,32 @@ class Fighter extends AppModel {
 
             if($datas['Fighter']['level'] == 0) // (1)
             {
+
+
                 // @todo : Vérfier que le personnage appartient bien à l'utilisateur connecté
                 // @todo : Vérifier que le couple (randomX,randomY) n'est pas déjà occupé.
-                $randomX=(rand()%15);
-                $randomY=(rand()%10);
+
+                do {
+
+                $randomX = (rand() % 15);
+                $randomY = (rand() % 10);
+
+                $occupationCase = $this->find('first', array('conditions' => array(
+                        'coordinate_x' => $randomX,
+                        'coordinate_y' => $randomY))
+                    );
+                }while($occupationCase != null);
+
+                $this->set('coordinate_x' , $randomX);
+                $this->set('coordinate_y' , $randomY);
+                $this->set('level', 1);
+
+                $this->save();
+
+
+
+
 
             }
     }
-} 
-
+}   
