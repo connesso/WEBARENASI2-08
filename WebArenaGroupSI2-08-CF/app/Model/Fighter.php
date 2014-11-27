@@ -1,5 +1,8 @@
 <?php
+
 App::uses('AppModel', 'Model');
+
+Include ('Event.php');
 
 class Fighter extends AppModel {
 
@@ -22,7 +25,7 @@ class Fighter extends AppModel {
      * @todo : CONVENTION : SI le personnage est créé mais pas encore entré dans l'arène alors : level = 0
      * @todo : CONVENTION : Lors d'un level up, (tout les 4 points d'xp), le niveau augmente
      * @todo                mais xp n'est pas remis à 0.
-     * @todo                L'xp est déconté quand l'utilisateur choisi d'augmenter les stats de son fighter.
+     * @todo                L'xp est décompté quand l'utilisateur choisi d'augmenter les stats de son fighter.
      *
      */
 
@@ -31,12 +34,28 @@ class Fighter extends AppModel {
         //récupérer la position et fixer l'id de travail
         $datas = $this->read(null, $notreId);
 
-        //On récupère les données des personnages aux alentours s'ils existent
-        $positionEnnemy=$this->getPositionEnnemy($notreId);
-
+        /**
+         * BLOC INIT EVENT DEBUT
+         */
+        $handleEvent = new Event();
+        $nvlEv = array(
+            'name' => '',
+            'date' => '',
+            'coordinate_x' => '',
+            'coordinate_y' => ''
+        );
+        $nvlEv['name'] .= 'MVT : '.$datas['Fighter']['name'].' ';
+        $nvlEv['date'] .= 'AUTONOW'; // AUTONOW constante qui sort le bon format de date dans le model Event.
+        $nvlEv['coordinate_x'] .= $datas['Fighter']['coordinate_x'];
+        $nvlEv['coordinate_y'] .= $datas['Fighter']['coordinate_y'];
+        /**
+         * BLOC INIT EVENT FIN
+         */
 
         /**
-         * POUR CHAQUE DIRECTION :
+         * BLOC GESTION MOUVEMENT DEBUT
+         *
+         * Pour chaque direction :
          * Test (1) de direction
          * puis Test (2) de présence ennemi.
          * puis Test (3) de Bordure
@@ -46,27 +65,38 @@ class Fighter extends AppModel {
         /**
          * @ TODO : Tester la présence de piège obstacle et monstre.
          */
+        //On récupère les données des personnages aux alentours s'ils existent
+        $positionEnnemy=$this->getPositionEnnemy($notreId);
         if ($direction == 'north'){ //TEST1
             if($positionEnnemy['north']==null){ //TEST2
                 if($datas['Fighter']['coordinate_y'] != 9) { //TEST3
-                    $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
-
+                    $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         elseif ($direction == 'south'){
             if($positionEnnemy['south']==null){
                 if($datas['Fighter']['coordinate_y'] != 0) {
-                    $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
+                    $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         elseif ($direction == 'east'){
             if($positionEnnemy['east']==null){
                 if($datas['Fighter']['coordinate_x'] != 14) {
-                    $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
+                    $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
 
         elseif ($direction == 'west'){
             if($positionEnnemy['west']==null){
                 if($datas['Fighter']['coordinate_x'] != 0) {
-                    $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + -1);} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
+                    $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + -1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         else { return 'WTF???'; } // Cetteligne implique que le code HTML du formulaire a été modifé. (Via inspecter élément)
-
         $this->save();
+        /**
+         * BLOC GESTION MOUVEMENT FIN
+         */
+
+        /**
+         * LIGNE D'AJOUT DE L'EVENT DEBUT
+         */
+       $handleEvent->add($nvlEv['name'],$nvlEv['date'],$nvlEv['coordinate_x'],$nvlEv['coordinate_y']);
+        /**
+         * LIGNE D'AJOUT DE L'EVENT FIN
+         */
 
         return 'Il a bougé!';
     }
@@ -82,14 +112,39 @@ class Fighter extends AppModel {
             $xpNouveau = $xpActuel + $xpGagne ;
 
             // MODIFICATION
-            if ($xpNouveau % 4 == 0) $this->set('level',$datas['Fighter']['level'] +1 ); // LEVEL UPP
+            if ($xpNouveau % 4 == 0) {
+                $this->set('level', $datas['Fighter']['level'] + 1); // LEVEL UPP
+
+                                    /**
+                                     * BLOC INIT EVENT DEBUT
+                                     */
+                                    $handleEvent = new Event();
+                                    $nvlEv = array(
+                                        'name' => '',
+                                        'date' => '',
+                                        'coordinate_x' => '',
+                                        'coordinate_y' => ''
+                                    );
+                                    $nvlEv['name'] .= 'LVL : '.$datas['Fighter']['name'].' gagne un niveau!';
+                                    $nvlEv['date'] .= 'AUTONOW'; // NOW constante string qui sort le bon format de date dans le model Event.
+                                    $nvlEv['coordinate_x'] .= $datas['Fighter']['coordinate_x'];
+                                    $nvlEv['coordinate_y'] .= $datas['Fighter']['coordinate_y'];
+                                    /**
+                                     * BLOC INIT EVENT FIN
+                                     */
+                                    /**
+                                     * LIGNE D'AJOUT DE L'EVENT DEBUT
+                                     */
+                                    $handleEvent->add($nvlEv['name'],$nvlEv['date'],$nvlEv['coordinate_x'],$nvlEv['coordinate_y']);
+                                    /**
+                                     * LIGNE D'AJOUT DE L'EVENT FIN
+                                     */
+            }
             $this->set('xp', $xpNouveau) ;
 
             // SAUVEGARDATION
             $this->save();
         }
-
-
     }
 
     /**
@@ -107,8 +162,27 @@ class Fighter extends AppModel {
             $positionEnnemy = $this->getPositionEnnemy($notreId); // récupère les ennemis autour de notre fighter
 
             $textEvent = ''; // La ligne qui sera inséré dans la bdd event.
+            // Cette variable est obsolète maintenant que l'objet event est inséré.
 
-            // Vérification au cas ou le htmld u formulaire a été modifié
+            /**
+             * BLOC INIT EVENT DEBUT
+             */
+            $handleEvent = new Event();
+            $nvlEv = array(
+                'name' => '',
+                'date' => '',
+                'coordinate_x' => '',
+                'coordinate_y' => ''
+            );
+            $nvlEv['name'] .= 'ATK : '.$datas['Fighter']['name'].' ';
+            $nvlEv['date'] .= 'AUTONOW'; // NOW constante string qui sort le bon format de date dans le model Event.
+            $nvlEv['coordinate_x'] .= $datas['Fighter']['coordinate_x'];
+            $nvlEv['coordinate_y'] .= $datas['Fighter']['coordinate_y'];
+            /**
+             * BLOC INIT EVENT FIN
+             */
+
+            // Vérification au cas ou le html du formulaire a été modifié
             if($direction == 'north' || $direction ==  'south' || $direction == 'east' || $direction ==  'west') {
 
                 // Si un enemi est bien à portée dans cette direction.
@@ -127,20 +201,52 @@ class Fighter extends AppModel {
                         );
 
                         //@todo Ecrire cette phrase dans la bdd EVENT
+                        $nvlEv['name'] .= 'a infligé ' . $datas['Fighter']['skill_strength'] . ' dégats à ' . $positionEnnemy[$direction]['Fighter']['name'] . '.';
                         $textEvent = $datas['Fighter']['name'] . ' a infligé ' . $datas['Fighter']['skill_strength'] . ' dégats à ' . $positionEnnemy[$direction]['Fighter']['name'] . '.';
 
                         if($killingShot){ //Si l'adversaire a rendu l'âme
                             $gainxp += $positionEnnemy[$direction]['Fighter']['level'];
+                            $nvlEv['name'] .= ' [COUP MORTEL] ';
                             $textEvent .= '[ CRITICAL KILLING HIT BOOOM ] ';
                         }
 
+                        /**
+                         * LIGNE D'AJOUT DE L'EVENT DEBUT
+                         */
+                        $handleEvent->add($nvlEv['name'],$nvlEv['date'],$nvlEv['coordinate_x'],$nvlEv['coordinate_y']);
+                        /**
+                         * LIGNE D'AJOUT DE L'EVENT FIN
+                         */
+
                         $this->xPplusplus($notreId, $gainxp);
 
+
+
                         return $textEvent;
-                    } else
-                        return $datas['Fighter']['name'] . ' a rater son attaque sur ' . $positionEnnemy[$direction]['Fighter']['name'] . '.';
+                    } else {
+                        $nvlEv['name'] .= 'a raté son attaque sur ' . $positionEnnemy[$direction]['Fighter']['name'] . '.';
+                        /**
+                         * LIGNE D'AJOUT DE L'EVENT DEBUT
+                         */
+                        $handleEvent->add($nvlEv['name'],$nvlEv['date'],$nvlEv['coordinate_x'],$nvlEv['coordinate_y']);
+                        /**
+                         * LIGNE D'AJOUT DE L'EVENT FIN
+                         */
+                        return $datas['Fighter']['name'] . ' a raté son attaque sur ' . $positionEnnemy[$direction]['Fighter']['name'] . '.';
+                    }
+
                 }
-                return $datas['Fighter']['name'] . ' frappe dans le vide.';
+                {
+                    $nvlEv['name'] .= 'frappe dans le vide.';
+                    /**
+                     * LIGNE D'AJOUT DE L'EVENT DEBUT
+                     */
+                    $handleEvent->add($nvlEv['name'],$nvlEv['date'],$nvlEv['coordinate_x'],$nvlEv['coordinate_y']);
+                    /**
+                     * LIGNE D'AJOUT DE L'EVENT FIN
+                     */
+                    return $datas['Fighter']['name'] . ' frappe dans le vide.';
+                }
             }else
                 return ' WTF !!!';
     }
@@ -175,6 +281,33 @@ class Fighter extends AppModel {
     {
         //@ TODO: Check l'iD
         $datas = $this->read(null, $fighterId);
+
+        /**
+         * BLOC INIT EVENT DEBUT
+         */
+        $handleEvent = new Event();
+        $nvlEv = array(
+            'name' => '',
+            'date' => '',
+            'coordinate_x' => '',
+            'coordinate_y' => ''
+        );
+        $nvlEv['name'] .= 'RIP : '.$datas['Fighter']['name'].' est mort.';
+        $nvlEv['date'] .= 'AUTONOW'; // NOW constante string qui sort le bon format de date dans le model Event.
+        $nvlEv['coordinate_x'] .= $datas['Fighter']['coordinate_x'];
+        $nvlEv['coordinate_y'] .= $datas['Fighter']['coordinate_y'];
+        /**
+         * BLOC INIT EVENT FIN
+         */
+        /**
+         * LIGNE D'AJOUT DE L'EVENT DEBUT
+         */
+        $handleEvent->add($nvlEv['name'],$nvlEv['date'],$nvlEv['coordinate_x'],$nvlEv['coordinate_y']);
+        /**
+         * LIGNE D'AJOUT DE L'EVENT FIN
+         */
+
+
         $this->set('current_health', 0); // Il EST MORT
         $this->set('coordinate_x', -1); // DONC ON L'ENVOIE AU PARADIS (HORS JEU)
         $this->set('coordinate_y', -1); // (-1;-1) est la coordonnée du paradis.
@@ -361,6 +494,26 @@ class Fighter extends AppModel {
                 $this->set('coordinate_x' , $randomX);
                 $this->set('coordinate_y' , $randomY);
                 $this->set('level', 1);
+
+                /**
+                 * BLOC INIT EVENT DEBUT
+                 */
+                $handleEvent = new Event();
+                $nvlEv = array(
+                    'name' => '',
+                    'date' => '',
+                    'coordinate_x' => '',
+                    'coordinate_y' => ''
+                );
+                $nvlEv['name'] .= 'NEW : '.$datas['Fighter']['name'].' entre dans l\'arène.';
+                $nvlEv['date'] .= 'AUTONOW'; // NOW constante string qui sort le bon format de date dans le model Event.
+                $nvlEv['coordinate_x'] .= $datas['Fighter']['coordinate_x'];
+                $nvlEv['coordinate_y'] .= $datas['Fighter']['coordinate_y'];
+
+                $handleEvent->add($nvlEv['name'],$nvlEv['date'],$randomX,$randomY);
+                /**
+                 * LIGNE D'AJOUT DE L'EVENT FIN
+                 */
 
                 $this->save();
 
