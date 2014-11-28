@@ -18,6 +18,7 @@ class Event extends AppModel{
      * @param $coordY
      */
 
+
     public function add($description,$date,$coordX,$coordY)
     {
         //@TODO : blinder
@@ -38,4 +39,30 @@ class Event extends AppModel{
         $this->save($event);
     }
 
+    /**
+     *
+     * @param $nameF nom du fighter
+     * @param $limit nombre d'event a retourné
+     * @return array|null retourne un array si le joueur a jamais joué
+     */
+    public function getLastMoves($nameF, $limit)
+    {
+        $eventArray = $this->find('all',
+            array(
+                'conditions' => array('OR' => array( array('name LIKE' => 'ATK : '.$nameF.' %'), array( 'name LIKE' => 'MVT : '.$nameF.' %'))),
+                'order' => array('date DESC'),
+                'limit' => $limit
+            )
+        );
+        return $eventArray;
+    }
+
+    /**
+     * Sensé
+     * @param $idPlayer
+     */
+    public function lastEventPlayer($idPlayer)
+    {
+
+    }
 } 
