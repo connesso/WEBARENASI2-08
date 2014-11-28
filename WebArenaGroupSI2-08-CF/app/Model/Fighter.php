@@ -69,7 +69,7 @@ class Fighter extends AppModel {
         $positionEnnemy=$this->getPositionEnnemy($notreId);
         if ($direction == 'north'){ //TEST1
             if($positionEnnemy['north']==null){ //TEST2
-                if($datas['Fighter']['coordinate_y'] != 9) { //TEST3
+                if($datas['Fighter']['coordinate_y'] != 14) { //TEST3
                     $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         elseif ($direction == 'south'){
             if($positionEnnemy['south']==null){

@@ -15,6 +15,7 @@ class ArenasController extends AppController
 {   
     public function beforeFilter()
     {
+            $Taille = 15;
 
             if ($this->Session->read('Connected') == null AND ($this->request->params['action'] != 'login' AND $this->request->params['action'] != 'index')) 
             {
@@ -98,19 +99,7 @@ class ArenasController extends AppController
             // Is it from the form for moving?
             if (isset($this->request->data['Fightermove']))
             {
-
-                $processingResult = $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
-                if($processingResult)
-                {
-                    $this->Session->setFlash('Déplacement réalisé');
-                    
-                }
-                else 
-                {
-                    $this->Session->setFlash('Mouvement impossible');
-                }
                 
-
                 // MOUVEMENT MOUVEMENT MOUVEMENT
                 // doMove returne une chaine de carractère informant sur l'action effectuée.
                 // setFlash affiche le message
@@ -139,9 +128,7 @@ class ArenasController extends AppController
         //$this->Sight->remplir_tableau();
         //Modifier le plateau de jeu
         $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all')));
-        
 
-        $this->set('processingResult', $processingResult);
 
 
 
