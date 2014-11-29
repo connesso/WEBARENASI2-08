@@ -82,7 +82,7 @@ class Fighter extends AppModel {
 
 
         for ($i = 0; $i < $MAXCUMULABLE; $i++) {
-            if ($evts[$i]) {
+            if (isset($evts[$i])) {
 
                 ///Calcul de la distance entre deux dates
                 $date1 = date_create($evts[$i]['Event']['date']); // La date de l'action
