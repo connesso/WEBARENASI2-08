@@ -1,31 +1,23 @@
 <?php
-
 App::uses('AppController', 'Controller');
-
 /**
  * Main controller of our small application
  *
  * @author ...
  * @todo 
  */
-
 //A COMMENTER 
-
 class ArenasController extends AppController
 {   
     public function beforeFilter()
     {
-
             if ($this->Session->read('Connected') == null AND ($this->request->params['action'] != 'login' AND $this->request->params['action'] != 'index')) 
             {
                 $this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
             }
     }
         
-
-
      public $uses = array('Player', 'Fighter', 'Event','Sight');
-
     /**
      * index method : first page
      *
@@ -55,7 +47,6 @@ class ArenasController extends AppController
             }
             if (isset($this->request->data['Deconnexion']))
             {
-
                 $this->Session->delete('Connected');
                 //$this->Session->write('Connected', null);
                 //$this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
@@ -97,7 +88,6 @@ class ArenasController extends AppController
             // Is it from the form for moving?
             if (isset($this->request->data['Fightermove']))
             {
-
                 $processingResult = $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
                 if($processingResult)
                 {
@@ -109,7 +99,6 @@ class ArenasController extends AppController
                     $this->Session->setFlash('Mouvement impossible');
                 }
                 
-
                 // MOUVEMENT MOUVEMENT MOUVEMENT
                 // doMove returne une chaine de carractère informant sur l'action effectuée.
                 // setFlash affiche le message
@@ -118,7 +107,6 @@ class ArenasController extends AppController
                                 1, $this->request->data['Fightermove']['direction']
                         )
                 );
-
             }
             // Is it from the form for attacking?
             if (isset($this->request->data['Figherattack']))
@@ -134,18 +122,12 @@ class ArenasController extends AppController
             
             
         }
-
         //$this->Sight->remplir_tableau();
         //Modifier le plateau de jeu
         $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all')));
         
-
         $this->set('processingResult', $processingResult);
-
-
-
         $this->set('raw', $this->Fighter->find('all'));
-
     }
     
     public function diary()
@@ -156,6 +138,5 @@ class ArenasController extends AppController
    
     
     
-
 }
 ?>

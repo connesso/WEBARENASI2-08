@@ -26,6 +26,7 @@ echo ("Vous avez perdu votre mot de passe ?");
 echo $this->Form->create('Lostpassword');
 echo $this->Form->input('Email', array('type' => 'email'));
 echo $this->Form->end("Récupérer mon mot de passe");
+
 }
 
 pr($raw);
