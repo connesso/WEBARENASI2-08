@@ -79,6 +79,7 @@ class ArenasController extends AppController
      */
     public function sight()
     {
+
         $this->Fighter->find('all');
         // Does it come from a from (with a post method) ?
         if ($this->request->is('post'))
