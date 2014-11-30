@@ -11,7 +11,7 @@ class ArenasController extends AppController
 {   
     public function beforeFilter()
     {
-            if ($this->Session->read('Connected') == null AND ($this->request->params['action'] != 'login' AND $this->request->params['action'] != 'index')) 
+            if ($this->Session->read('Connected') == null AND ($this->request->params['action'] != 'login' AND $this->request->params['action'] != 'index' AND  $this->request->params['action'] != 'facebook')) 
             {
                 $this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
             }
@@ -134,7 +134,50 @@ class ArenasController extends AppController
     public function diary()
     {
         $this->set('raw',$this->Event->find());
-    }   
+    } 
+    
+    public function facebook(){
+        
+        require APPLIBS.'Facebook'.DS.'facebook.php';
+        $facebook = new Facebook(array(
+           'appId' => '739533262795662',
+           'secret' => 'f944711097efbdca6f0d322ee827475f'
+        ));
+        $user = $facebook->getUser();
+        if($user)
+        {
+            try{
+                $infos = $facebook->api('/me');
+                debug($infos);
+                $d = array(
+                    'email' => $infos['email']);
+                if($this->Player->userExists($infos['email'])){
+                    $playerid=$this->Player->getUserId($infos['email']);
+                    $this->Session->write('Connected', $playerid);
+                    $this->set('test', $this->Session->read('Connected'));
+                }
+                else if($this->Player->save($d)){
+                    $playerid=$this->Player->getUserId($infos['email']);
+                    $this->Session->write('Connected', $playerid);
+                    $this->set('test', $this->Session->read('Connected'));
+                }
+                else{
+                    $this->Session->setFlash("L'adresse mail est déja utilisée");
+                }
+            } catch (FacebookApiException $ex) {
+                
+                debug($e);
+
+            }
+        }else{
+            $this->Session->setFlash("Erreur connexion facebook");
+            $this->redirect(array('action'=>'login'));
+        }
+        
+        //die();
+            
+        
+    }
     
    
     
