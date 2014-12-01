@@ -51,6 +51,7 @@ class ArenasController extends AppController
             if (isset($this->request->data['Deconnexion']))
             {
                 $this->Session->delete('Connected');
+                $this->Session->write('Fighter',0);
                 //$this->Session->write('Connected', null);
                 //$this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
             }
