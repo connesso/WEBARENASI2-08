@@ -31,6 +31,9 @@ class Fighter extends AppModel {
      */
 
 
+    
+        
+
     /**
      * OPTION OPTION OPTION
      * Vérfie si le joueur peut jouer ce coup ou doit attendre.
@@ -61,7 +64,7 @@ class Fighter extends AppModel {
          * ---------------> True : Max de coups pour un new perso. False : 1 seul coup pour le new.
          */
         $MAXCUMULABLE = 3;
-        $COOLDOWN = 10;
+        $COOLDOWN = 1;
         $NOOBLUCK = FALSE; // NON UTILISE
         /**
          * VARIABLES UTILES?
@@ -168,6 +171,8 @@ class Fighter extends AppModel {
         /**
          * @ TODO : Tester la présence de piège obstacle et monstre.
          */
+        //
+        if($this->checkTime(date('Y-m-d H:i:s'), $notreId)){
         //On récupère les données des personnages aux alentours s'ils existent
         $positionEnnemy=$this->getPositionEnnemy($notreId);
         if ($direction == 'north'){ //TEST1
@@ -189,6 +194,7 @@ class Fighter extends AppModel {
                     $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + -1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         else { return 'WTF???'; } // Cetteligne implique que le code HTML du formulaire a été modifé. (Via inspecter élément)
         $this->save();
+        
         /**
          * BLOC GESTION MOUVEMENT FIN
          */
@@ -202,6 +208,8 @@ class Fighter extends AppModel {
          */
 
         return 'Il a bougé!';
+        
+        }
     }
     function xPplusplus($notreId, $xpGagne)
     {
@@ -684,7 +692,7 @@ class Fighter extends AppModel {
     {
         $datas = $this->find('all');
         
-        $return_data;
+        $return_data='';
         foreach ($datas as $value)
         {
             if($value['Player']['id']==$playerId)

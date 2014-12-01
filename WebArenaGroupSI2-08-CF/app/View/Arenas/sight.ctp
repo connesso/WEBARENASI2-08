@@ -17,6 +17,13 @@
 
     <div id="info_perso">
         <div id="menu">
+            
+            <?php 
+            $image = "../img/Avatar/{$fighter_id}.png";
+             echo '<img class = "avatar"src="'. $image .'">'; 
+            ;?>
+            
+            <!--<img src="../img/Avatar/89.png">-->
             <p>vie : <?php echo $vie ?></p>
             
             <p>force : <?php echo $force ?></p>
