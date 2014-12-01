@@ -19,6 +19,7 @@ class Fighter extends AppModel {
     );
 
     /**
+     *@done  : CONVENTION : playerId -> id du Player connecté
      * @todo : CONVENTION : notreId -> id du fighter que l'on manipule / enemyId -> id du fighter ennemi.
      * @todo : CONVENTION : Les coordonnées d'un personnage Hors jeu sont : (-1,-1)
      * @todo : CONVENTION : SI le personnage est mort alors : current_health = 0
@@ -450,9 +451,16 @@ class Fighter extends AppModel {
      *  /!\ : INCOMPLETE
      */
 
-    public function enterTheBattle($notreId)
+    public function enterTheBattle($notreId, $playerId)
     {
 
+        $table =$this->find('all');
+        /*foreach ($table as $value) 
+        {
+            $value['Fighter']['coordinate_x']=0;
+        }
+        $this->save();
+        return $table;*/
 
         /**
          * Avant de commencer il faut s'assurer que :
@@ -469,17 +477,27 @@ class Fighter extends AppModel {
          * Save toutes les données.
          *  @todo : Il faut créer un event et le sauver en BDD si l'action réussit.
          *
+         */ 
+        
+
+        
+        /**
+         * Placer le bon fighter sur la carte aléatoirement
          */
-
+        
             $datas = $this->read(null, $notreId);
-
-            if($datas['Fighter']['level'] == 0) // (1)
+            //$datas = $this->find('all');
+            //if($datas['Fighter']['level'] == 0) // (1)
             {
 
 
                 // @todo : Vérfier que le personnage appartient bien à l'utilisateur connecté
                 // @todo : Vérifier que le couple (randomX,randomY) n'est pas déjà occupé.
-
+                
+               
+                
+                
+                
                 do {
 
                 $randomX = (rand() % 15);
@@ -492,13 +510,16 @@ class Fighter extends AppModel {
                 }while($occupationCase != null);
 
                 $this->set('coordinate_x' , $randomX);
+                $this->save();
                 $this->set('coordinate_y' , $randomY);
+                $this->save();
                 $this->set('level', 1);
+                $this->save();
 
                 /**
                  * BLOC INIT EVENT DEBUT
                  */
-                $handleEvent = new Event();
+               $handleEvent = new Event();
                 $nvlEv = array(
                     'name' => '',
                     'date' => '',
@@ -514,13 +535,92 @@ class Fighter extends AppModel {
                 /**
                  * LIGNE D'AJOUT DE L'EVENT FIN
                  */
+                
+                
+                
+                
+                
+                
 
                 $this->save();
 
 
 
 
-
-            }
+                   
+            } return $table;
     }
-}   
+    
+    /**
+     * Retourne tout les fighter du Player connecté
+     * @param type $playerId
+     * @return type
+     */
+    
+    public function list_fighter($playerId)
+    {
+        $datas = $this->find('all');
+        
+        $return_data;
+        foreach ($datas as $value)
+        {
+            if($value['Player']['id']==$playerId)
+            {
+                $return_data[$value['Fighter']['id']]=$value['Fighter']['name'];
+            }
+
+        }
+        return $return_data;
+    }
+    
+    public function degager ($playerId)
+    {
+        $table = $this->find('all');
+        foreach ($table as $value) 
+        {
+            if($value['Player']['id']==$playerId)
+            {
+                $value['Fighter']['coordinate_x']=-2;
+                $this->save($value);
+                $value['Fighter']['coordinate_y']=-2;
+                $this->save($value);
+            }
+        }
+         
+        return $table;
+    }
+    
+    public function get_vie($notreId)
+    {
+        $datas = $this->read(null, $notreId);
+        return $datas['Fighter']['current_health'];
+    }
+    
+    public function get_level($notreId)
+    {
+        $datas = $this->read(null, $notreId);
+        return $datas['Fighter']['level'];
+    }
+    
+    public function get_force($notreId)
+    {
+        
+        $datas = $this->read(null, $notreId);
+        return $datas['Fighter']['skill_strength'];
+    }
+    
+    public function get_vue($notreId)
+    {
+      
+        $datas = $this->read(null, $notreId);
+        return $datas['Fighter']['skill_sight'];
+    }
+    
+    public function get_xp($notreId)
+    {
+      
+        $datas = $this->read(null, $notreId);
+        return $datas['Fighter']['xp'];
+    }
+}
+    

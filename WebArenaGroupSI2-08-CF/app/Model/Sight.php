@@ -5,39 +5,39 @@ App::uses('AppModel', 'Model');
 class Sight extends AppModel 
 {
 
-
-    public function remplir_tableau($Characters)
+    public $Taille = 15;
+    
+    public function get_taille()
     {
-        /*$plateau[0]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[1]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[2]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[3]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[4]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[5]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[6]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[7]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[8]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[9]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[10]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);$plateau[11]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);
-        $plateau[12]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);
-        $plateau[13]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);
-        $plateau[14]=array(' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',);*/
-        // Affichage de Notre position par x
-        //$datas = $this->read(null, 1);
-        
-        
+        return $this->Taille;
+    }
+    public function remplir_tableau($Characters,$Taille,$NotreFighter,$vue)
+    {
+        //initialisation du tableau avec du vide
         $X=0;
         $Y=0;
-        for($i=0;$i<15;$i++)
+        for($i=0;$i<$Taille;$i++)
         {
-            for($j=0;$j<15;$j++)
+            for($j=0;$j<$Taille;$j++)
             {
                 $plateau[$i][$j]=' ';
             }
             
             
         }
+        
+        //Remplissage tableau les joueur présents dans l'arène
         foreach ($Characters as $value){
             foreach($value as $key1=>$value2){
                 if($key1=='Fighter'){
                     foreach($value2 as $key2=>$value3)
                         {
-                        if ($key2=='coordinate_x' )//AND $key2>=0 AND $key2<=14)
+                        if ($key2=='coordinate_x' )
                             {
                             $X=$value3;
                             
                             }
-                        if ($key2=='coordinate_y' )//AND $key2>=0 AND $key2<=14)
+                        if ($key2=='coordinate_y' )
                             {
                             $Y=$value3;
                            
@@ -48,13 +48,49 @@ class Sight extends AppModel
                             $msg = $value3; 
                         }
                     }
-                    if ($X>=0 AND $X<15 AND $Y>=0 AND $Y<15)
+                    if ($X>=0 AND $X<$Taille AND $Y>=0 AND $Y<$Taille)
                     {
-                        $plateau[15-1-$Y][$X]=$msg;
+                        $plateau[$Taille-1-$Y][$X]=$msg;
                     }
                 }
             }  
         }
+        
+        /*
+         * masquage des élément en dehors de la vue
+         */
+        
+        //déterminer la position de notre Fighter
+  
+        for($i=0;$i<$Taille;$i++)
+        {
+            for($j=0;$j<$Taille;$j++)
+            {
+                if($plateau[$i][$j]==$NotreFighter)
+                {
+                    $position_x=$i;//position x de notre fighter 
+                    $position_y=$j;//position y de notre fighter
+                }
+            }
+            
+            
+        }
+        //cacher tout  ce qui est inférieur à notre vue
+        for($i=0;$i<$Taille;$i++)
+        {
+            for($j=0;$j<$Taille;$j++)
+            {
+                if(abs($i-$position_x)+abs($j-$position_y)>$vue)
+                {
+                    $plateau[$i][$j]='B';
+                }
+            }
+            
+            
+        }
+        
+
+        
         
         
         return $plateau;

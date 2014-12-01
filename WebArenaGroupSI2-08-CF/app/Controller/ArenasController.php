@@ -12,10 +12,11 @@ App::uses('AppController', 'Controller');
 //A COMMENTER 
 
 class ArenasController extends AppController
-{   
+{ 
+    public $Taille = 15;
     public function beforeFilter()
     {
-            $Taille = 15;
+            
 
             if ($this->Session->read('Connected') == null AND ($this->request->params['action'] != 'login' AND $this->request->params['action'] != 'index')) 
             {
@@ -63,20 +64,29 @@ class ArenasController extends AppController
             }
         }
         
-        $this->set('raw', $this->Player->find('all'));
+        $this->set('raw', $this->Fighter->find('all'));
         $this->set('test', $this->Session->read('Connected'));
     }
     
     public function character()
     {
+        $test3=3;
         if ($this->request->is('post'))
         {
             if (isset($this->request->data['Newfighter']))
             {
                 $this->Fighter->createNew($this->Session->read('Connected'), $this->request->data['Newfighter']['Nom']);
             }
+             if (isset($this->request->data['SelectFighter']))
+             { 
+               
+                $this->Session->write('Fighter', $this->request->data['SelectFighter']['id']); 
+                $test3=$this->Fighter->degager($this->Session->read('Connected'));
+                $this->Fighter->enterTheBattle($this->Session->read('Fighter'), $this->Session->read('Connected'));
+             }
         }
-        $this->set('raw', $this->Fighter->find('all'));
+        $this->set('available_Fighter', $this->Fighter->list_fighter($this->Session->read('Connected')));
+       
     }
     
     public function log($msg, $type = LOG_ERR, $scope = NULL)
@@ -91,7 +101,7 @@ class ArenasController extends AppController
     {
 
         $this->Fighter->find('all');
-        // Does it come from a from (with a post method) ?
+        // Does it come from a form (with a post method) ?
         if ($this->request->is('post'))
         {
             // What are the recieved datas?
@@ -103,11 +113,11 @@ class ArenasController extends AppController
                 // MOUVEMENT MOUVEMENT MOUVEMENT
                 // doMove returne une chaine de carractère informant sur l'action effectuée.
                 // setFlash affiche le message
-                $this->Session->setFlash(
+                //$this->Session->setFlash(
                         $this->Fighter->doMove(
-                                1, $this->request->data['Fightermove']['direction']
-                        )
-                );
+                                $this->Session->read('Fighter'), $this->request->data['Fightermove']['direction']
+                        );
+                //);
 
             }
             // Is it from the form for attacking?
@@ -116,23 +126,36 @@ class ArenasController extends AppController
                 // ATACK ATACK ATACK
                 // doAttack returne une chaine de carractère informant sur l'action effectuée.
                 // setFlash affiche le message
-                $this->Session->setFlash(
+                //$this->Session->setFlash(
                     $this->Fighter->doAttack(
-                        1, $this->request->data['Figherattack']['direction'])
-                    );
+                        $this->Session->read('Fighter'), $this->request->data['Figherattack']['direction'])
+                    //);
+                            ;
+            }
+            
+            if (isset($this->request->data['Stat']))  
+            {
+                $this->Fighter->statsUp($this->Session->read('Fighter'), $this->request->data['Stat']['stat']);
             }
             
             
         }
 
-        //$this->Sight->remplir_tableau();
+        /* Envoie d'éléments à la vue dynamique de la page combat*/
+        
         //Modifier le plateau de jeu
-        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all')));
+        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all'),$this->Sight->get_taille(),$this->Session->read('Fighter'),$this->Fighter->get_vue($this->Session->read('Fighter'))));
+        $this->set('vie',$this->Fighter->get_vie($this->Session->read('Fighter')));
+        $this->set('level',$this->Fighter->get_level($this->Session->read('Fighter')));
+        $this->set('force',$this->Fighter->get_force($this->Session->read('Fighter')));
+        $this->set('vue',$this->Fighter->get_vue($this->Session->read('Fighter')));
+        $this->set('xp',$this->Fighter->get_xp($this->Session->read('Fighter')));
+        //$this->set('vie', $this->Sight->test());
+        
 
 
 
-
-        $this->set('raw', $this->Fighter->find('all'));
+        //$this->set('raw', $this->Fighter->find('all'));
 
     }
     

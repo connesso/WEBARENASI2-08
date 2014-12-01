@@ -60,34 +60,27 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         
                         <div class="button"><?php echo $this->Html->link('Personnage', array('controller' => 'Arenas', 'action' => 'character')); ?></div>
                         <div class="button"><?php echo $this->Html->link('Journal', array('controller' => 'Arenas', 'action' => 'diary')); ?></div>
-                        <div class="button"><?php echo $this->Html->link('Log', array('controller' => 'Arenas', 'action' => 'log')); ?></div>
+                        <div class="button"><?php echo $this->Html->link('Log', array('controller' => 'Arenas', 'action' => 'log')) ;?></div>
                 </nav>
 		<div id="content">
 
 			<?php echo $this->Session->flash(); ?>
 
-			<?php echo $this->fetch('content'); ?>
+			<?php echo $this->fetch('content') ;?>
 		</div>
 		<div id="footer">
                     
-                    <p>
-                        
-			<?php echo("WebArenaGoupSI2-08-CF");?>
-		    </p>
+                    <p>WebArenaGoupSI2-08-CF</p>
                     
-                    <p>
-			<?php echo("Brunel Vivien Connesson Rémi Grondin Lionel");?>
-		    </p>
+                    <p>Brunel Vivien Connesson Rémi Grondin Lionel</p>
                     
-                    <p>
-                        <a href = "https://docs.google.com/document/d/1lA-iU6TGZCiYtuwtMvjqqAeuIUpU5vdfRisRhGf6TrU/edit?usp=sharing">Notre fichier Git</a>
-                    </p>
+                    <p><a href = "https://docs.google.com/document/d/1lA-iU6TGZCiYtuwtMvjqqAeuIUpU5vdfRisRhGf6TrU/edit?usp=sharing">Notre fichier Git</a></p>
                     
                     <p>
 				<?php echo $cakeVersion; ?>
 		    </p>
 		</div>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
+	<?php //echo $this->element('sql_dump'); ?>
 </body>
 </html>
