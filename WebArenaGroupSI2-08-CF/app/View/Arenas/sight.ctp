@@ -11,10 +11,26 @@
             echo $this->Form->end('Attack');
         ?>
     </div>
-    <table id="Arenne">
-        <?php echo $this->Html->tableCells($plateau);?>
-    </table>
-
+    
+    <?php
+    
+        
+        
+        if($fighter_id==0)
+        {
+            echo '<div class ="Arenne">';
+            echo 'Vous devez choisir un personnage';
+            echo '</div>';
+        }
+        else
+        {
+            echo '<table class="Arenne">';
+            echo $this->Html->tableCells($plateau); 
+            echo '</table>';
+        }
+        
+   
+    ?>
     <div id="info_perso">
         <div id="menu">
             

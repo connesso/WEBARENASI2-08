@@ -116,16 +116,17 @@ tr, td
     //background-color: black;
     //height : 635px;
 }
-#Arenne {
+.Arenne {
     float : left;
     margin:auto;
     margin-top: 40px;
     margin-bottom: 40px;
     padding : 0;
-   
+    text-align: center;
+    background-color: white;
     border-collapse: collapse;
-     width: 60%;
-     height: 600px;
+     width: 580px;
+     height: 580px;
      border : 5px solid #b08f0a;
 }
 #commande
