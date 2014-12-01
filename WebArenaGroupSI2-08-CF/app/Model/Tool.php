@@ -43,6 +43,7 @@ class Tool extends AppModel{
      */
     public function randomGen()
     {
+        if($this->countObject()==0){
 
         /**
          * gen alea.
@@ -93,6 +94,21 @@ class Tool extends AppModel{
 
         $this->create();
         $this->save($info);
+        }
+    }
+    
+    //Retourne le nombre d'objet non inutilisé
+    public function countObject(){
+        $i=0;
+        $datas=$this->find('all');
+        foreach($datas as $d){
+            if($d['Tool']['fighter_id']==null){
+                $i++;
+            }
+        }
+        return $i;
+        
+        
     }
 
     /**
