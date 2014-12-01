@@ -65,4 +65,10 @@ class Event extends AppModel{
     {
 
     }
+
+    /**
+     * Retourne tool ou null si rien sur la case.
+     */
+
+
 } 

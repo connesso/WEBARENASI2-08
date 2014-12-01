@@ -7,7 +7,7 @@ Include ('Event.php');
 class Fighter extends AppModel {
 
     public $displayField = 'name';
-
+    public $hasMany = array('Tool');
     public $belongsTo = array(
         'Player' => array(
             'className' => 'Player',
@@ -30,9 +30,6 @@ class Fighter extends AppModel {
      *
      */
 
-
-    
-        
 
     /**
      * OPTION OPTION OPTION
@@ -64,7 +61,7 @@ class Fighter extends AppModel {
          * ---------------> True : Max de coups pour un new perso. False : 1 seul coup pour le new.
          */
         $MAXCUMULABLE = 3;
-        $COOLDOWN = 1;
+        $COOLDOWN = 10;
         $NOOBLUCK = FALSE; // NON UTILISE
         /**
          * VARIABLES UTILES?
@@ -103,8 +100,8 @@ class Fighter extends AppModel {
                 $deltas[] = $sec + $min + $hr + $da;
 
             } else { // Pas d'event.
-                        //// ERREUR POSSIBLE
-                    $deltas[] = $MAXCUMULABLE * $COOLDOWN + 1; /// on met à l'infini /// TOUJOURS VRAI.
+                //// ERREUR POSSIBLE
+                $deltas[] = $MAXCUMULABLE * $COOLDOWN + 1; /// on met à l'infini /// TOUJOURS VRAI.
 
 
             }
@@ -171,13 +168,12 @@ class Fighter extends AppModel {
         /**
          * @ TODO : Tester la présence de piège obstacle et monstre.
          */
-        //
-        if($this->checkTime(date('Y-m-d H:i:s'), $notreId)){
+        if($this->checkTime(date('Y-m-d H:i:s'),$notreId)) {
         //On récupère les données des personnages aux alentours s'ils existent
         $positionEnnemy=$this->getPositionEnnemy($notreId);
         if ($direction == 'north'){ //TEST1
             if($positionEnnemy['north']==null){ //TEST2
-                if($datas['Fighter']['coordinate_y'] != 14) { //TEST3
+                if($datas['Fighter']['coordinate_y'] != 9) { //TEST3
                     $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         elseif ($direction == 'south'){
             if($positionEnnemy['south']==null){
@@ -194,7 +190,6 @@ class Fighter extends AppModel {
                     $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + -1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         else { return 'WTF???'; } // Cetteligne implique que le code HTML du formulaire a été modifé. (Via inspecter élément)
         $this->save();
-        
         /**
          * BLOC GESTION MOUVEMENT FIN
          */
@@ -202,15 +197,15 @@ class Fighter extends AppModel {
         /**
          * LIGNE D'AJOUT DE L'EVENT DEBUT
          */
-       $handleEvent->add($nvlEv['name'],$nvlEv['date'],$nvlEv['coordinate_x'],$nvlEv['coordinate_y']);
+        $handleEvent->add($nvlEv['name'],$nvlEv['date'],$nvlEv['coordinate_x'],$nvlEv['coordinate_y']);
         /**
          * LIGNE D'AJOUT DE L'EVENT FIN
          */
 
         return 'Il a bougé!';
-        
         }
     }
+
     function xPplusplus($notreId, $xpGagne)
     {
         // TESTATION
@@ -434,10 +429,23 @@ class Fighter extends AppModel {
          */
 
 
+        /**
+         * KILL SON EQUIPEMENT
+         * 1) Checker equipement.
+         * 1opt) ENlever stat equip.
+         * 1opt) Poser equipement si rien dessus. Sinon poser aleatoire.
+         *
+         */
+
+        $this->drop($fighterId);
         $this->set('current_health', 0); // Il EST MORT
         $this->set('coordinate_x', -1); // DONC ON L'ENVOIE AU PARADIS (HORS JEU)
         $this->set('coordinate_y', -1); // (-1;-1) est la coordonnée du paradis.
         $this->save();
+
+
+
+
     }
 
     /**
@@ -582,11 +590,11 @@ class Fighter extends AppModel {
      *  Insert un personnage tout juste créé dans l'arène.
      *
      */
- public function enterTheBattle($notreId, $playerId)
+    public function enterTheBattle($notreId, $playerId)
     {
 
         $table =$this->find('all');
-        /*foreach ($table as $value) 
+        /*foreach ($table as $value)
         {
             $value['Fighter']['coordinate_x']=0;
         }
@@ -608,28 +616,28 @@ class Fighter extends AppModel {
          * Save toutes les données.
          *  @todo : Il faut créer un event et le sauver en BDD si l'action réussit.
          *
-         */ 
-        
+         */
 
-        
+
+
         /**
          * Placer le bon fighter sur la carte aléatoirement
          */
-        
-            $datas = $this->read(null, $notreId);
-            //$datas = $this->find('all');
-            //if($datas['Fighter']['level'] == 0) // (1)
-            {
+
+        $datas = $this->read(null, $notreId);
+        //$datas = $this->find('all');
+        //if($datas['Fighter']['level'] == 0) // (1)
+        {
 
 
-                // @todo : Vérfier que le personnage appartient bien à l'utilisateur connecté
-                // @todo : Vérifier que le couple (randomX,randomY) n'est pas déjà occupé.
-                
-               
-                
-                
-                
-                do {
+            // @todo : Vérfier que le personnage appartient bien à l'utilisateur connecté
+            // @todo : Vérifier que le couple (randomX,randomY) n'est pas déjà occupé.
+
+
+
+
+
+            do {
 
                 $randomX = (rand() % 15);
                 $randomY = (rand() % 10);
@@ -637,62 +645,50 @@ class Fighter extends AppModel {
                 $occupationCase = $this->find('first', array('conditions' => array(
                         'coordinate_x' => $randomX,
                         'coordinate_y' => $randomY))
-                    );
-                }while($occupationCase != null);
-
-                $this->set('coordinate_x' , $randomX);
-                $this->save();
-                $this->set('coordinate_y' , $randomY);
-                $this->save();
-                $this->set('level', 1);
-                $this->save();
-
-                /**
-                 * BLOC INIT EVENT DEBUT
-                 */
-               $handleEvent = new Event();
-                $nvlEv = array(
-                    'name' => '',
-                    'date' => '',
-                    'coordinate_x' => '',
-                    'coordinate_y' => ''
                 );
-                $nvlEv['name'] .= 'NEW : '.$datas['Fighter']['name'].' entre dans l\'arène.';
-                $nvlEv['date'] .= 'AUTONOW'; // NOW constante string qui sort le bon format de date dans le model Event.
-                $nvlEv['coordinate_x'] .= $datas['Fighter']['coordinate_x'];
-                $nvlEv['coordinate_y'] .= $datas['Fighter']['coordinate_y'];
+            }while($occupationCase != null);
 
-                $handleEvent->add($nvlEv['name'],$nvlEv['date'],$randomX,$randomY);
-                /**
-                 * LIGNE D'AJOUT DE L'EVENT FIN
-                 */
-                
-                
-                
-                
-                
-                
+            $this->set('coordinate_x' , $randomX);
+            $this->save();
+            $this->set('coordinate_y' , $randomY);
+            $this->save();
+            $this->set('level', 1);
+            $this->save();
 
-                $this->save();
+            /**
+             * BLOC INIT EVENT DEBUT
+             */
+            $handleEvent = new Event();
+            $nvlEv = array(
+                'name' => '',
+                'date' => '',
+                'coordinate_x' => '',
+                'coordinate_y' => ''
+            );
+            $nvlEv['name'] .= 'NEW : '.$datas['Fighter']['name'].' entre dans l\'arène.';
+            $nvlEv['date'] .= 'AUTONOW'; // NOW constante string qui sort le bon format de date dans le model Event.
+            $nvlEv['coordinate_x'] .= $datas['Fighter']['coordinate_x'];
+            $nvlEv['coordinate_y'] .= $datas['Fighter']['coordinate_y'];
 
-
-
-
-                   
-            } return $table;
+            $handleEvent->add($nvlEv['name'],$nvlEv['date'],$randomX,$randomY);
+            /**
+             * LIGNE D'AJOUT DE L'EVENT FIN
+             */
+            $this->save();
+        } return $table;
     }
-    
+
     /**
      * Retourne tout les fighter du Player connecté
      * @param type $playerId
      * @return type
      */
-    
+
     public function list_fighter($playerId)
     {
         $datas = $this->find('all');
-        
-        $return_data='';
+
+        $return_data;
         foreach ($datas as $value)
         {
             if($value['Player']['id']==$playerId)
@@ -703,11 +699,11 @@ class Fighter extends AppModel {
         }
         return $return_data;
     }
-    
+
     public function degager ($playerId)
     {
         $table = $this->find('all');
-        foreach ($table as $value) 
+        foreach ($table as $value)
         {
             if($value['Player']['id']==$playerId)
             {
@@ -717,40 +713,145 @@ class Fighter extends AppModel {
                 $this->save($value);
             }
         }
-         
+
         return $table;
     }
-    
+
+
+
     public function get_vie($notreId)
     {
         $datas = $this->read(null, $notreId);
         return $datas['Fighter']['current_health'];
     }
-    
+
     public function get_level($notreId)
     {
         $datas = $this->read(null, $notreId);
         return $datas['Fighter']['level'];
     }
-    
+
     public function get_force($notreId)
     {
-        
+
         $datas = $this->read(null, $notreId);
         return $datas['Fighter']['skill_strength'];
     }
-    
+
     public function get_vue($notreId)
     {
-      
+
         $datas = $this->read(null, $notreId);
         return $datas['Fighter']['skill_sight'];
     }
-    
+
     public function get_xp($notreId)
     {
-      
+
         $datas = $this->read(null, $notreId);
         return $datas['Fighter']['xp'];
+    }
+
+    public function get_tool($notreId)
+    {
+        $tool = $this->find('first', array(
+            'conditions' => array(
+                'fighter_id' => $notreId
+            )
+        ));
+
+        return $tool;
+    }
+
+    /**
+     * Retourne l'equipement du joueur
+     * @param $notreId
+     * @return array Stats de l'quipement
+     * --------->'type' retoune le type augmenté.
+     * --------->'level' retourne le niveau de progression offert par l'obj.
+     */
+    public function get_stats_tool($notreId)
+    {
+        $tool = $this->get_tool($notreId);
+
+        if($tool) {
+            $stats = array(
+                'type' => $tool['Tool']['type'],
+                'level' => $tool['Tool']['bonus']
+            );
+        } else {
+            $stats = array(
+                'type' => 'tout nu',
+                'level' => 0
+            );
+        }
+        return $stats;
+    }
+
+
+
+    function statChg($type , $bonus, $fighterId)
+    {
+        $datas = $this->read(null, $fighterId);
+        switch($type)
+        {
+            case 'hea' :
+                $this->set('current_health', $datas['Fighter']['current_health'] + 3*$bonus);
+                $this->set('skill_health', $datas['Fighter']['skill_health'] + 3*$bonus );
+                $this->save();
+                break;
+            case 'str' :
+                $this->set('skill_strength', $datas['Fighter']['skill_strength'] + $bonus );
+                $this->save();
+                break;
+            case 'sig' :
+                $this->set('skill_sight', $datas['Fighter']['skill_sight'] + $bonus );
+                $this->save();
+                break;
+            default :
+                break;
+        }
+
+    }
+
+    /**
+     * Rammasse un objet.
+     * @param $tool
+     * @param $fighterId
+     */
+    public function loot($tool, $fighterId)
+    {
+
+        $this->drop($fighterId, true);
+        $this->equiper($tool,$fighterId);
+
+    }
+
+    /**
+     * Fait tomber l'quipment a terre et baisse les caracs (ou ne fait rien si pas d'equiment)
+     * @param $fighterId l'id du joueur qui perd son equipement.
+     * @param $ignore mettre à TRUE dans la fonction LOOT() et à FALSE dansl a fonction KILL()
+     */
+    private function drop($fighterId,$ignore = false)
+    {
+        $datas = $this->read(null, $fighterId);
+        $toolOn = $this->get_tool($fighterId);
+
+        if($toolOn){
+            $this->statChg($toolOn['Tool']['type'],(-1)*$toolOn['Tool']['bonus'], $datas['Fighter']['id']);
+            $toolOn->poser($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y'], $ignore);
+        }
+    }
+
+    /**
+     * Equipe un objet et change les caracs joueur
+     * @param $tool L'objet a équiper
+     * @param $fighterId le fighter qui s'equipe
+     */
+    private function equiper($tool, $fighterId)
+    {
+        $datas = $this->read(null, $fighterId);
+        $tool->equip($fighterId);
+        $this->statChg($tool['Tool']['type'],(+1)*$tool['Tool']['bonus'], $datas['Fighter']['id']);
     }
 }
