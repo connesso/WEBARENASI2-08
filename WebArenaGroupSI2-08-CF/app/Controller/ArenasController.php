@@ -20,7 +20,7 @@ class ArenasController extends AppController
             }
     }
         
-     public $uses = array('Player', 'Fighter', 'Event','Sight');
+     public $uses = array('Player', 'Fighter', 'Event','Sight', 'Tool');
     /**
      * index method : first page
      *
@@ -177,15 +177,16 @@ class ArenasController extends AppController
         //$this->set('etc',$this->Tool->find('all'));
 
         //Modifier le plateau de jeu
-        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all'),/*$this->Tool->find('all'),*/$this->Sight->get_taille(),$this->Session->read('Fighter'),$this->Fighter->get_vue($this->Session->read('Fighter'))));
+        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all'),$this->Sight->get_taille(),$this->Session->read('Fighter'),$this->Fighter->get_vue($this->Session->read('Fighter'))));
         $this->set('vie',$this->Fighter->get_vie($this->Session->read('Fighter')));
         $this->set('level',$this->Fighter->get_level($this->Session->read('Fighter')));
         $this->set('force',$this->Fighter->get_force($this->Session->read('Fighter')));
         $this->set('vue',$this->Fighter->get_vue($this->Session->read('Fighter')));
         $this->set('xp',$this->Fighter->get_xp($this->Session->read('Fighter')));
         $this->set("fighter_id",$this->Session->read('Fighter'));
+        $this->Tool->randomGen();
         //$this->set('vie', $this->Sight->test());
-        
+       
 
 
 

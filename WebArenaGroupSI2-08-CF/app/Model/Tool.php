@@ -10,8 +10,10 @@ App::uses('AppModel', 'Model');
 
 class Tool extends AppModel{
     
+    public $displayField = 'name';
     
-    public $belongsTo = array(
+    
+    /*public $belongsTo = array(
         
         'Player' => array(
             
@@ -25,7 +27,7 @@ class Tool extends AppModel{
             
             'order' => ''
         ),
-    );
+    );*/
 
 
     /**

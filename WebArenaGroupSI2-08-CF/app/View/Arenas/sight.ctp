@@ -111,6 +111,8 @@
             echo $this->Form->input('stat',array('options' => array('hearth'=>'vie','strength'=>'force','sight'=>'vue'), 'default' => 'vue'));
             echo $this->Form->end('Augmenter cette stat');
             ?>
+            
+           
         </div>
 
 
