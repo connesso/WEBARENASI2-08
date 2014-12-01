@@ -13,7 +13,7 @@ class Tool extends AppModel{
     public $displayField = 'name';
     
     
-    /*public $belongsTo = array(
+    public $belongsTo = array(
         
         'Player' => array(
             
@@ -27,7 +27,7 @@ class Tool extends AppModel{
             
             'order' => ''
         ),
-    );*/
+    );
 
 
     /**
@@ -74,8 +74,9 @@ class Tool extends AppModel{
             $randomY = (rand() % 10);
 
             $occupationCase = $this->find('first', array('conditions' => array(
-                    'coordinate_x' => $randomX,
-                    'coordinate_y' => $randomY))
+                    'Tool.coordinate_x' => $randomX,
+                    'Tool.coordinate_y' => $randomY
+                ))
             );
         }while($occupationCase != null);
 
