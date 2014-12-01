@@ -6,6 +6,14 @@ App::uses('Security', 'Utility');
 class Player extends AppModel {
 
     public $displayField = 'name';
+    
+    /*public $validate = array(
+        password => array(
+            'rule' => 'not Empty',
+            'required' => false
+        )
+        
+    );*/
 
 
     public $hasMany = array(
@@ -50,7 +58,34 @@ class Player extends AppModel {
             } 
         }
     }
-
+    
+    public function getUserId($email)
+    {
+       
+        
+        $playarrays=$this->find('all');
+        foreach($playarrays as $play)
+        {
+            
+            if ($play['Player']['email'] == $email) {
+                return $play['Player']['id'];
+            } 
+        }
+    }
+    
+    public function userExists($email)
+    {
+        $playarrays=$this->find('all');
+        foreach($playarrays as $play)
+        {
+            
+            if ($play['Player']['email'] == $email) {
+                return true;
+            } 
+        }
+        return false;
+    }
+   
     
     
     

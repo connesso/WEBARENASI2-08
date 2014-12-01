@@ -21,10 +21,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <html>
 <head>
 	<?php echo $this->Html->charset(); ?>
+    
 	<title>
                 <?php  echo $title_for_layout ?>
                 
 	</title>
+    <script src="http://code.jquery.com/jquery.js"></script>
 	<?php
 		echo $this->Html->meta('icon');
 
@@ -36,6 +38,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	?>
 </head>
 <body>
+    
+    <div id="fb-root"></div>
    
 	<div id="container"> 
             
@@ -83,4 +87,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	</div>
 	<?php //echo $this->element('sql_dump'); ?>
 </body>
+<?php echo $this->Html->script('facebook'); ?>
+
+
 </html>

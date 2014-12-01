@@ -1,33 +1,26 @@
 <?php
-
 App::uses('AppController', 'Controller');
-
 /**
  * Main controller of our small application
  *
  * @author ...
  * @todo 
  */
-
 //A COMMENTER 
-
 class ArenasController extends AppController
 { 
     public $Taille = 15;
     public function beforeFilter()
     {
-            
 
-            if ($this->Session->read('Connected') == null AND ($this->request->params['action'] != 'login' AND $this->request->params['action'] != 'index')) 
+            if ($this->Session->read('Connected') == null AND ($this->request->params['action'] != 'login' AND $this->request->params['action'] != 'index' AND  $this->request->params['action'] != 'facebook')) 
+
             {
                 $this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
             }
     }
         
-
-
      public $uses = array('Player', 'Fighter', 'Event','Sight');
-
     /**
      * index method : first page
      *
@@ -57,7 +50,6 @@ class ArenasController extends AppController
             }
             if (isset($this->request->data['Deconnexion']))
             {
-
                 $this->Session->delete('Connected');
                 //$this->Session->write('Connected', null);
                 //$this->redirect(array('controller' => 'Arenas', 'action' => 'login'));
@@ -109,15 +101,19 @@ class ArenasController extends AppController
             // Is it from the form for moving?
             if (isset($this->request->data['Fightermove']))
             {
+
                 
                 // MOUVEMENT MOUVEMENT MOUVEMENT
                 // doMove returne une chaine de carractère informant sur l'action effectuée.
                 // setFlash affiche le message
                 //$this->Session->setFlash(
                         $this->Fighter->doMove(
+
                                 $this->Session->read('Fighter'), $this->request->data['Fightermove']['direction']
                         );
                 //);
+
+
 
             }
             // Is it from the form for attacking?
@@ -141,8 +137,10 @@ class ArenasController extends AppController
             
         }
 
+
         /* Envoie d'éléments à la vue dynamique de la page combat*/
         
+
         //Modifier le plateau de jeu
         $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all'),$this->Sight->get_taille(),$this->Session->read('Fighter'),$this->Fighter->get_vue($this->Session->read('Fighter'))));
         $this->set('vie',$this->Fighter->get_vie($this->Session->read('Fighter')));
@@ -155,18 +153,62 @@ class ArenasController extends AppController
 
 
 
+
         //$this->set('raw', $this->Fighter->find('all'));
+
 
     }
     
     public function diary()
     {
         $this->set('raw',$this->Event->find());
-    }   
+    } 
+    
+    public function facebook(){
+        
+        require APPLIBS.'Facebook'.DS.'facebook.php';
+        $facebook = new Facebook(array(
+           'appId' => '739533262795662',
+           'secret' => 'f944711097efbdca6f0d322ee827475f'
+        ));
+        $user = $facebook->getUser();
+        if($user)
+        {
+            try{
+                $infos = $facebook->api('/me');
+                debug($infos);
+                $d = array(
+                    'email' => $infos['email']);
+                if($this->Player->userExists($infos['email'])){
+                    $playerid=$this->Player->getUserId($infos['email']);
+                    $this->Session->write('Connected', $playerid);
+                    $this->set('test', $this->Session->read('Connected'));
+                }
+                else if($this->Player->save($d)){
+                    $playerid=$this->Player->getUserId($infos['email']);
+                    $this->Session->write('Connected', $playerid);
+                    $this->set('test', $this->Session->read('Connected'));
+                }
+                else{
+                    $this->Session->setFlash("L'adresse mail est déja utilisée");
+                }
+            } catch (FacebookApiException $ex) {
+                
+                debug($e);
+
+            }
+        }else{
+            $this->Session->setFlash("Erreur connexion facebook");
+            $this->redirect(array('action'=>'login'));
+        }
+        
+        //die();
+            
+        
+    }
     
    
     
     
-
 }
 ?>
