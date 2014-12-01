@@ -161,15 +161,15 @@ class Tool extends AppModel{
         }
     }
 
-    /**
-     * Equipe l'objet au fighter dont l'ID est passée en paramètre.
-     * @param $fighter_id
-     */
-    public function equip($fighter_id)
+    //Fonction refaite
+    public function equip($fighter_id, $tool_id)
     {
+        $tool=$this->read(null, $tool_id);
         $this->set('coordinate_x', -3);
-        $this->set('coordinate_Y', -3);
+        $this->set('coordinate_x', -3);
         $this->set('fighter_id', $fighter_id);
+        $this->save();
+        
     }
     
     function getPositionObjet($notreId)

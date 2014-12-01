@@ -7,7 +7,17 @@ Include ('Event.php');
 class Fighter extends AppModel {
 
     public $displayField = 'name';
-    public $hasMany = array('Tool');
+    
+    public $hasMany = array(
+        'Tool' => array( 
+        'className' => 'Tool',
+        'foreignKey' => 'fighter_id',
+        'conditions' => '',
+        'fields' => '',
+        'order' => ''      
+        ),    
+    );
+    
     public $belongsTo = array(
         'Player' => array(
             'className' => 'Player',

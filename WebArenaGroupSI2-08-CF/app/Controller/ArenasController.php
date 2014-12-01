@@ -185,6 +185,7 @@ class ArenasController extends AppController
         $this->set('xp',$this->Fighter->get_xp($this->Session->read('Fighter')));
         $this->set("fighter_id",$this->Session->read('Fighter'));
         $this->Tool->randomGen();
+        //$this->Tool->equip(19,62);
         $this->Tool->countObject();
         //$this->set('vie', $this->Sight->test());
        
