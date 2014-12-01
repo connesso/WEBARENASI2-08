@@ -61,7 +61,7 @@ class Fighter extends AppModel {
          * ---------------> True : Max de coups pour un new perso. False : 1 seul coup pour le new.
          */
         $MAXCUMULABLE = 3;
-        $COOLDOWN = 10;
+        $COOLDOWN = 1;
         $NOOBLUCK = FALSE; // NON UTILISE
         /**
          * VARIABLES UTILES?
@@ -173,7 +173,7 @@ class Fighter extends AppModel {
         $positionEnnemy=$this->getPositionEnnemy($notreId);
         if ($direction == 'north'){ //TEST1
             if($positionEnnemy['north']==null){ //TEST2
-                if($datas['Fighter']['coordinate_y'] != 9) { //TEST3
+                if($datas['Fighter']['coordinate_y'] != 15) { //TEST3
                     $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         elseif ($direction == 'south'){
             if($positionEnnemy['south']==null){

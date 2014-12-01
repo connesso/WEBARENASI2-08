@@ -158,6 +158,11 @@ class ArenasController extends AppController
                     //);
                             ;
             }
+            if (isset($this->request->data['Figherramasse']))
+            {
+                
+            } 
+            
             
             if (isset($this->request->data['Stat']))  
             {
@@ -169,10 +174,10 @@ class ArenasController extends AppController
 
 
         /* Envoie d'éléments à la vue dynamique de la page combat*/
-        
+        //$this->set('etc',$this->Tool->find('all'));
 
         //Modifier le plateau de jeu
-        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all'),$this->Sight->get_taille(),$this->Session->read('Fighter'),$this->Fighter->get_vue($this->Session->read('Fighter'))));
+        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all'),/*$this->Tool->find('all'),*/$this->Sight->get_taille(),$this->Session->read('Fighter'),$this->Fighter->get_vue($this->Session->read('Fighter'))));
         $this->set('vie',$this->Fighter->get_vie($this->Session->read('Fighter')));
         $this->set('level',$this->Fighter->get_level($this->Session->read('Fighter')));
         $this->set('force',$this->Fighter->get_force($this->Session->read('Fighter')));

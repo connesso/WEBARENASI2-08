@@ -25,6 +25,7 @@ class Sight extends AppModel
             
             
         }
+
         
         //Remplissage tableau les joueur présents dans l'arène
         foreach ($Characters as $value){
@@ -50,7 +51,7 @@ class Sight extends AppModel
                     }
                     if ($X>=0 AND $X<$Taille AND $Y>=0 AND $Y<$Taille)
                     {
-                        $plateau[$Taille-1-$Y][$X]=$msg;
+                        $plateau[$Taille-1-$Y][$X]= $msg;
                     }
                 }
             }  
