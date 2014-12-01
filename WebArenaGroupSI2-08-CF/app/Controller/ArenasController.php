@@ -69,6 +69,33 @@ class ArenasController extends AppController
             if (isset($this->request->data['Newfighter']))
             {
                 $this->Fighter->createNew($this->Session->read('Connected'), $this->request->data['Newfighter']['Nom']);
+                
+                //($this->request->data['Newfighter']['Avatar_file']['tmp_name'])
+                
+                
+                $tmp=$this->Fighter->find('all');
+                $tmp2=0;
+                foreach ($tmp as $value)
+                {
+                    if($value['Fighter']['id']>$tmp2)
+                    {
+                        $tmp2=$value['Fighter']['id'];
+                    }
+                    
+                }
+                
+                
+                $nom = "../webroot/img/Avatar/{$tmp2}.png";
+                //if (isset($this->request->data['Newfighter']['avatar_file']['tmp_name']))
+                {
+                $resultat = move_uploaded_file($this->request->data['Newfighter']['avatar_file']['tmp_name'],$nom);
+                //if ($resultat) echo "Transfert réussi";
+                }
+               //if ($resultat) echo "Transfert réussi";
+                $this->Session->write("Avatar",$nom);
+                
+                
+                
             }
              if (isset($this->request->data['SelectFighter']))
              { 
@@ -79,6 +106,7 @@ class ArenasController extends AppController
              }
         }
         $this->set('available_Fighter', $this->Fighter->list_fighter($this->Session->read('Connected')));
+        $this->set("figter_id",$this->Session->read('Fighter'));
        
     }
     
@@ -149,6 +177,7 @@ class ArenasController extends AppController
         $this->set('force',$this->Fighter->get_force($this->Session->read('Fighter')));
         $this->set('vue',$this->Fighter->get_vue($this->Session->read('Fighter')));
         $this->set('xp',$this->Fighter->get_xp($this->Session->read('Fighter')));
+        $this->set("fighter_id",$this->Session->read('Fighter'));
         //$this->set('vie', $this->Sight->test());
         
 

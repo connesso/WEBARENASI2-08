@@ -77,10 +77,10 @@ nav a:hover
 #footer
 {
         text-align: center;
-	color : white;
+	color : black;
 	margin : auto; 
 	background-color : white; 
-        background-color: rgba(0,0,0,0.6);
+        //background-color: rgba(0,0,0,0.6);
         border : 5px solid #b08f0a;
         
 }
@@ -130,7 +130,7 @@ tr, td
 }
 #commande
 {
-    color : white;
+    color : black;
     text-align: center;
     width: 150px;
     height : 580px;
@@ -138,13 +138,14 @@ tr, td
     //margin-left:15px;
     margin-right:40px;
     float : left;
-    background-color: rgba(0,0,0,0.6);
+    //background-color: rgba(0,0,0,0.6);
+    background-color: white;
     border : 5px solid #b08f0a;
 }
 
 #info_perso
 {
-    color : white;
+    color : black;
     text-align:center;
     width: 150px;
     height: 580px;
@@ -152,7 +153,8 @@ tr, td
     margin-left:40px;
     //margin-right: 15px;
     float : left;
-    background-color: rgba(0,0,0,0.6);
+    //background-color: rgba(0,0,0,0.6);
+    background-color: white;
     border : 5px solid #b08f0a;
 }
 
@@ -165,5 +167,35 @@ tr, td
 {
     margin-top: 40px;
 }
+
+.avatar
+{
+    height : 140px;
+    width: 140px;
+}
     
+section
+{
+    text-align : justify;
+
+   margin-top:  40px; 
+   width : 450px;
+   background-color: white;
+   border : 5px solid #b08f0a; 
+   float: left;
+   height : 520px;
+   padding: 10px;
+}
+
+.left
+{
+    margin-right :40px;
+}
+
+.contenu
+{
+    height: 600px;
+}
+
+
 
