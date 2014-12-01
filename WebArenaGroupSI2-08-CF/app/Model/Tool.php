@@ -175,23 +175,23 @@ class Tool extends AppModel{
 
         $Objectsouth = $this->find('first', array(
                 'conditions' => array(
-                    'Tools.coordinate_y' => $datas['Fighter']['coordinate_y']-1,
-                    'Tools.coordinate_x' => $datas['Fighter']['coordinate_x'])
+                    'Tools.coordinate_y' => $datas['Tools']['coordinate_y']-1,
+                    'Tools.coordinate_x' => $datas['Tools']['coordinate_x'])
             )
         );
 
         $Objecteast = $this->find('first', array(
                 'conditions' => array(
-                    'Tools.coordinate_x' => $datas['Fighter']['coordinate_x']+1,
-                    'Tools.coordinate_y' => $datas['Fighter']['coordinate_y']
+                    'Tools.coordinate_x' => $datas['Tools']['coordinate_x']+1,
+                    'Tools.coordinate_y' => $datas['Tools']['coordinate_y']
                 )
             )
         );
 
         $Objectwest = $this->find('first', array(
                 'conditions' => array(
-                    'Tools.coordinate_x' => $datas['Fighter']['coordinate_x']-1,
-                    'Tools.coordinate_y' => $datas['Fighter']['coordinate_y']
+                    'Tools.coordinate_x' => $datas['Tools']['coordinate_x']-1,
+                    'Tools.coordinate_y' => $datas['Tools']['coordinate_y']
                 )
             )
         );
@@ -201,17 +201,18 @@ class Tool extends AppModel{
             'east'=> $Objecteast,
             'west'=> $Objectwest,
         );
+
         return $postionObject;
     }
     
     function dorammasage($notreId, $direction)
     {
         $datas = $this->read(null, $notreId);
-        $positionEnnemy = $this->getPositionObject($notreId);
+        $positionObject = $this->getPositionObject($notreId);
         if ($direction == 'north' || $direction == 'south' || $direction == 'east' || $direction == 'west') {
 
                 // Si un enemi est bien à portée dans cette direction.
-                if ($positionEnnemy [$direction] != null) 
+                if ($positionObject [$direction] != null) 
                 {
                       $this->equip($notreId); 
                 }
