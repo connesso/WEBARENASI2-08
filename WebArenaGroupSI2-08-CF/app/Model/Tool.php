@@ -142,5 +142,67 @@ class Tool extends AppModel{
         $this->set('coordinate_Y', -3);
         $this->set('fighter_id', $fighter_id);
     }
+    
+    function getPositionObjet($notreId)
+    {
+        $datas = $this->read(null, $notreId);
+
+        $Objectnorth = $this->find('first', array(
+                'conditions' => array(
+                    'Tools.coordinate_y' => $datas['Tools']['coordinate_y']+1,
+                    'Tools.coordinate_x' => $datas['Tools']['coordinate_x']
+                )
+            )
+        );
+
+        $Objectsouth = $this->find('first', array(
+                'conditions' => array(
+                    'Tools.coordinate_y' => $datas['Fighter']['coordinate_y']-1,
+                    'Tools.coordinate_x' => $datas['Fighter']['coordinate_x'])
+            )
+        );
+
+        $Objecteast = $this->find('first', array(
+                'conditions' => array(
+                    'Tools.coordinate_x' => $datas['Fighter']['coordinate_x']+1,
+                    'Tools.coordinate_y' => $datas['Fighter']['coordinate_y']
+                )
+            )
+        );
+
+        $Objectwest = $this->find('first', array(
+                'conditions' => array(
+                    'Tools.coordinate_x' => $datas['Fighter']['coordinate_x']-1,
+                    'Tools.coordinate_y' => $datas['Fighter']['coordinate_y']
+                )
+            )
+        );
+        $postionObject = array(
+            'north'=> $Objectnorth,
+            'south'=> $Objectsouth,
+            'east'=> $Objecteast,
+            'west'=> $Objectwest,
+        );
+        return $postionEnnemy;
+    }
+    
+    function dorammasage($notreId, $direction)
+    {
+        $datas = $this->read(null, $notreId);
+        $positionEnnemy = $this->getPositionObject($notreId);
+        if ($direction == 'north' || $direction == 'south' || $direction == 'east' || $direction == 'west') {
+
+                // Si un enemi est bien à portée dans cette direction.
+                if ($positionEnnemy [$direction] != null) 
+                {
+                      $this->equip($notreId); 
+                }
+    
+                
+    
+        }
+                
+    }
+    
 
 } 
