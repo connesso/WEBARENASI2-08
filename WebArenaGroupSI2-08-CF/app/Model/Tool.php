@@ -201,7 +201,7 @@ class Tool extends AppModel{
             'east'=> $Objecteast,
             'west'=> $Objectwest,
         );
-        return $postionEnnemy;
+        return $postionObject;
     }
     
     function dorammasage($notreId, $direction)
