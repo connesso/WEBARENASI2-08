@@ -28,14 +28,6 @@ class Tool extends AppModel{
     );
 
 
-
-    /**
-     * @TODO : IMPORTANT IMPORTANT IMPORTANT
-     * @TODO : LIMITER LE NOMBRE D'OBJET LIBRE EN CIRCULATION
-     * @TODO : (suite) ET EMPECHER LA GENERATION D'OBJET AINSI QUE LA POSE SI LA LIMITE EST ATTEINTE.
-     * @TODO : LIONEL OU VIVENFAIS LE STP APRES AVOIR INTEGRER LA VUE! :)
-     */
-
     /**
      *  CETTE LIGNE PERMET DE COMPTER LE NOMBRE D'OBJET NON EQUIPE
      *  $this->find('count', array('conditions' => array('fighter_id' => null))));
@@ -211,7 +203,6 @@ class Tool extends AppModel{
         $positionObject = $this->getPositionObject($notreId);
         if ($direction == 'north' || $direction == 'south' || $direction == 'east' || $direction == 'west') {
 
-                // Si un enemi est bien à portée dans cette direction.
                 if ($positionObject [$direction] != null) 
                 {
                       $this->equip($notreId); 
