@@ -41,7 +41,7 @@ class Player extends AppModel {
         $infos = array('email' => $email, 'password'=>$password);
         $this->create();
         $this->save($infos);
-        
+        return $this->getUserId($email);
     }
     
     public function checkLogin($email, $password)

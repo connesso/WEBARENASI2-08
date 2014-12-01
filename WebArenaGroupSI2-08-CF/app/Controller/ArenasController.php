@@ -40,7 +40,8 @@ class ArenasController extends AppController
         {
             if (isset($this->request->data['Inscription']))
             {
-                $this->Player->createNew($this->request->data['Inscription']['Email'],$this->request->data['Inscription']['Mot de passe']);
+                $processingResult=$this->Player->createNew($this->request->data['Inscription']['Email'],$this->request->data['Inscription']['Mot de passe']);
+                $this->Session->write('Connected', $processingResult);
             }
             // Is it from the form for attacking?
             if (isset($this->request->data['Connexion']))
