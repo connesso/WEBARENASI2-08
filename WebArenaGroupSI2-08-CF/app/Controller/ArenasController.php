@@ -215,7 +215,7 @@ class ArenasController extends AppController
         {
             try{
                 $infos = $facebook->api('/me');
-                debug($infos);
+                //debug($infos);
                 $d = array(
                     'email' => $infos['email']);
                 if($this->Player->userExists($infos['email'])){

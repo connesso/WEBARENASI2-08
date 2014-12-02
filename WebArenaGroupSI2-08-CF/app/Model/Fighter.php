@@ -8,15 +8,6 @@ class Fighter extends AppModel {
 
     public $displayField = 'name';
     
-    public $hasMany = array(
-        'Tool' => array( 
-        'className' => 'Tool',
-        'foreignKey' => 'fighter_id',
-        'conditions' => '',
-        'fields' => '',
-        'order' => ''      
-        ),    
-    );
     
     public $belongsTo = array(
         'Player' => array(
@@ -447,7 +438,6 @@ class Fighter extends AppModel {
          *
          */
 
-        $this->drop($fighterId);
         $this->set('current_health', 0); // Il EST MORT
         $this->set('coordinate_x', -1); // DONC ON L'ENVOIE AU PARADIS (HORS JEU)
         $this->set('coordinate_y', -1); // (-1;-1) est la coordonnée du paradis.
@@ -760,108 +750,5 @@ class Fighter extends AppModel {
 
         $datas = $this->read(null, $notreId);
         return $datas['Fighter']['xp'];
-    }
-
-    public function get_tool($notreId)
-    {
-        $tool = $this->find('first', array(
-            'conditions' => array(
-                'fighter_id' => $notreId
-            )
-        ));
-
-        return $tool;
-    }
-
-    /**
-     * Retourne l'equipement du joueur
-     * @param $notreId
-     * @return array Stats de l'quipement
-     * --------->'type' retoune le type augmenté.
-     * --------->'level' retourne le niveau de progression offert par l'obj.
-     */
-    public function get_stats_tool($notreId)
-    {
-        $tool = $this->get_tool($notreId);
-
-        if($tool) {
-            $stats = array(
-                'type' => $tool['Tool']['type'],
-                'level' => $tool['Tool']['bonus']
-            );
-        } else {
-            $stats = array(
-                'type' => 'tout nu',
-                'level' => 0
-            );
-        }
-        return $stats;
-    }
-
-
-
-    function statChg($type , $bonus, $fighterId)
-    {
-        $datas = $this->read(null, $fighterId);
-        switch($type)
-        {
-            case 'hea' :
-                $this->set('current_health', $datas['Fighter']['current_health'] + 3*$bonus);
-                $this->set('skill_health', $datas['Fighter']['skill_health'] + 3*$bonus );
-                $this->save();
-                break;
-            case 'str' :
-                $this->set('skill_strength', $datas['Fighter']['skill_strength'] + $bonus );
-                $this->save();
-                break;
-            case 'sig' :
-                $this->set('skill_sight', $datas['Fighter']['skill_sight'] + $bonus );
-                $this->save();
-                break;
-            default :
-                break;
-        }
-
-    }
-
-    /**
-     * Rammasse un objet.
-     * @param $tool
-     * @param $fighterId
-     */
-    public function loot($tool, $fighterId)
-    {
-
-        $this->drop($fighterId, true);
-        $this->equiper($tool,$fighterId);
-
-    }
-
-    /**
-     * Fait tomber l'quipment a terre et baisse les caracs (ou ne fait rien si pas d'equiment)
-     * @param $fighterId l'id du joueur qui perd son equipement.
-     * @param $ignore mettre à TRUE dans la fonction LOOT() et à FALSE dansl a fonction KILL()
-     */
-    private function drop($fighterId,$ignore = false)
-    {
-        $datas = $this->read(null, $fighterId);
-        $toolOn = $this->get_tool($fighterId);
-
-        if($toolOn){
-            $this->statChg($toolOn['Tool']['type'],(-1)*$toolOn['Tool']['bonus'], $datas['Fighter']['id']);
-            $toolOn->poser($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y'], $ignore);
-        }
-    }
-
-    /**
-     * Equipe un objet et change les caracs joueur
-     * @param $tool L'objet a équiper
-     * @param $fighterId le fighter qui s'equipe
-     */
-    private function equiper($tool, $fighterId)
-    {
-        $datas = $this->read(null, $fighterId);
-        $tool->equip($fighterId);
-        $this->statChg($tool['Tool']['type'],(+1)*$tool['Tool']['bonus'], $datas['Fighter']['id']);
     }
 }
