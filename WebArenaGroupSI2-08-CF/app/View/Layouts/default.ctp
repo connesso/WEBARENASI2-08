@@ -86,7 +86,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                       
                         
                     
-                    <p><a href = "https://docs.google.com/document/d/1lA-iU6TGZCiYtuwtMvjqqAeuIUpU5vdfRisRhGf6TrU/edit?usp=sharing">Notre fichier Git</a></p>
+                    <p><a href = 'https://github.com/connesso/WEBARENASI2-08'>Notre fichier Git</a></p>
                     
                     <p>
 				<?php echo $cakeVersion; ?>
