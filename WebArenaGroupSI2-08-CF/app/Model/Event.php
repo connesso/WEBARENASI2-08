@@ -18,7 +18,37 @@ class Event extends AppModel{
      * @param $coordY
      */
 
+    public function event24()
+    {
 
+        $dateNow = date('Y-m-d H:i:s');
+        $dateSeconde = strtotime($dateNow) - 86400;
+        $dateBefore = date('Y-m-d H:i:s', $dateSeconde);
+
+        $eventArray = $this->find('all',
+            array(
+                'conditions' => array('date >' => $dateBefore),
+                'order' => array('date DESC')
+            )
+        );
+        return $eventArray;
+    }
+
+    public function event24byName($nameFighter)
+    {
+
+        $dateNow = date('Y-m-d H:i:s');
+        $dateSeconde = strtotime($dateNow) - 86400;
+        $dateBefore = date('Y-m-d H:i:s', $dateSeconde);
+
+        $eventArray = $this->find('all',
+            array(
+                'conditions' => array('date >' => $dateBefore, 'name LIKE' => '______'.$nameFighter.'%'),
+                'order' => array('date DESC')
+            )
+        );
+        return $eventArray;
+    }
     public function add($description,$date,$coordX,$coordY)
     {
         //@TODO : blinder
@@ -61,9 +91,15 @@ class Event extends AppModel{
      * Sensé
      * @param $idPlayer
      */
-    public function lastEventPlayer($idPlayer)
+    public function lastEventFighter($idFighter, $nbHour)
     {
-
+        $eventArray = $this->find('all',
+            array(
+                'conditions' => array('OR' => array( array('name LIKE' => 'ATK : '.$nameF.' %'), array( 'name LIKE' => 'MVT : '.$nameF.' %'))),
+                'order' => array('date DESC'),
+                'limit' => $limit
+            )
+        );
     }
 
     /**

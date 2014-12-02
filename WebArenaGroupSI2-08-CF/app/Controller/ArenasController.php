@@ -20,7 +20,9 @@ class ArenasController extends AppController
             }
     }
         
+
      public $uses = array('Player', 'Fighter', 'Event','Sight', 'Tool');
+
     /**
      * index method : first page
      *
@@ -121,6 +123,7 @@ class ArenasController extends AppController
      */
     public function sight()
     {
+       $this->set('exemple',0);
 
         $this->Fighter->find('all');
         // Does it come from a form (with a post method) ?
@@ -141,7 +144,34 @@ class ArenasController extends AppController
 
                                 $this->Session->read('Fighter'), $this->request->data['Fightermove']['direction']
                         );
-                //);
+                        $data=$this->Fighter->find('all');
+                        foreach($data as $value)
+                        {
+                            foreach ($value as $key=>$value2)
+                            {
+                                if($key=='Fighter')
+                                {
+                                if($value2['id']==$this->Session->read('Fighter'))
+                                 {
+                                                $x=$value2['coordinate_x'];
+                                                $y=$value2['coordinate_y'];
+                                 }
+                                        
+                                        
+                                    
+                                }
+                            }
+                        }
+                        //$x=1;
+                        //$y=1;
+                        $this->set('exemple',$data);
+                       
+                        if ($this->Tool->findByCoord($x,$y) !=null)
+                        {
+
+                            $this->Tool->equip($this->Session->read('Fighter'),$this->Tool->findByCoord($x,$y));
+
+                        }
 
 
 
@@ -177,16 +207,24 @@ class ArenasController extends AppController
         //$this->set('etc',$this->Tool->find('all'));
 
         //Modifier le plateau de jeu
-        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all'),$this->Sight->get_taille(),$this->Session->read('Fighter'),$this->Fighter->get_vue($this->Session->read('Fighter'))));
+
+        
+        $this->set('plateau',$this->Sight->remplir_tableau($this->Fighter->find('all'),$this->Tool->find('all'),$this->Sight->get_taille(),$this->Session->read('Fighter'),$this->Fighter->get_vue($this->Session->read('Fighter'))));
+
         $this->set('vie',$this->Fighter->get_vie($this->Session->read('Fighter')));
         $this->set('level',$this->Fighter->get_level($this->Session->read('Fighter')));
         $this->set('force',$this->Fighter->get_force($this->Session->read('Fighter')));
         $this->set('vue',$this->Fighter->get_vue($this->Session->read('Fighter')));
         $this->set('xp',$this->Fighter->get_xp($this->Session->read('Fighter')));
         $this->set("fighter_id",$this->Session->read('Fighter'));
+
         $this->Tool->randomGen();
         //$this->Tool->equip(19,62);
-        $this->Tool->countObject();
+      
+
+         
+        $this->set('exemple',$this->Tool->find('all'));
+
         //$this->set('vie', $this->Sight->test());
        
 
@@ -200,7 +238,8 @@ class ArenasController extends AppController
     
     public function diary()
     {
-        $this->set('raw',$this->Event->find());
+        $this->set('raw',$this->Event->event24());
+        
     } 
     
     public function facebook(){

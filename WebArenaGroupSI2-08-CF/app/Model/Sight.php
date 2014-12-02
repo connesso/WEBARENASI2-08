@@ -11,7 +11,7 @@ class Sight extends AppModel
     {
         return $this->Taille;
     }
-    public function remplir_tableau($Characters,$Taille,$NotreFighter,$vue)
+    public function remplir_tableau($Characters,$Tool,$Taille,$NotreFighter,$vue)
     {
         //initialisation du tableau avec du vide
         $X=0;
@@ -24,6 +24,64 @@ class Sight extends AppModel
             }
             
             
+        }
+        foreach ($Tool as $value)
+        {
+            foreach($value as $key1=>$value2)
+            {
+                if($key1=='Tool')
+                {
+                    foreach($value2 as $key2=>$value3)
+                    {
+                        if ($key2=='coordinate_x' )
+                            {
+                            $X=$value3;
+                            
+                            }
+                        if ($key2=='coordinate_y' )
+                            {
+                            $Y=$value3;
+                           
+                            }
+                            
+                        if ($key2=='type')
+                        {
+                            if($value3=='vue')
+                            {
+                                $msg='V';
+                            }
+                            if($value3=='life')
+                            {
+                                $msg='L';
+                            }
+                            if($value3=='force')
+                            {
+                                $msg='F';
+                            }
+                        }
+                        
+                    }
+                    if ($X>=0 AND $X<$Taille AND $Y>=0 AND $Y<$Taille)
+                    {
+                        $plateau[$Taille-1-$Y][$X]= $msg;
+                    }
+                }
+            }
+            /*if($value['Tool']['coordinate_x']>=0 AND $value['Tool']['coordinate_x']<$Taille AND $value['Tool']['coordinate_y']>=0 AND $value['Tool']['coordinate_y']<$Taille)
+            {
+                if($value['Tool']['Type']='Life')
+                {
+                    $plateau[$Taille-1-$value['Tool']['coordinate_y']][$$value['Tool']['coordinate_x']]= 'L';
+                }
+                elseif($value['Tool']['Type']='Force')
+                {
+                    $plateau[$Taille-1-$value['Tool']['coordinate_y']][$$value['Tool']['coordinate_x']]= 'F';
+                }
+                elseif($value['Tool']['Type']='Vue')
+                {
+                    $plateau[$Taille-1-$value['Tool']['coordinate_y']][$$value['Tool']['coordinate_x']]= 'V';
+                }
+            }*/
         }
 
         

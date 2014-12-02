@@ -15,7 +15,7 @@ class Tool extends AppModel{
     
     public $belongsTo = array(
         
-        'Player' => array(
+        'Fighter' => array(
             
             'className' => 'Fighter',
             
@@ -52,13 +52,13 @@ class Tool extends AppModel{
         switch(rand(0,2))
         {
             case 0:
-                $type = 'sig';
+                $type = 'life';
                 break;
             case 1:
-                $type = 'str';
+                $type = 'force';
                 break;
             case 2:
-                $type = 'hea';
+                $type = 'vue';
                 break;
         }
 
@@ -119,119 +119,69 @@ class Tool extends AppModel{
      */
     public function findByCoord($x,$y)
     {
-        $tool = $this->find('first', array('condtions' => array('coordinate_x' => $x, 'coordinate_y' => $y, 'fighter_id' => null)));
-
-        if($tool) return $tool;
-        else return null;
-    }
-
-    /**
-     * Pose l'objet au sol, si la case n'est pas libre alors l'objet rebondit
-     * et est jeté aléatoirement dans l'arène.
-     * @param $coX
-     * @param $coY
-     * @param $ignore permet de poser un objet au sol meme si un objet est déjà présent . (Utile pour switcher eq perso)
-     */
-    public function poser($coX, $coY, $ignore)
-    {
-        $this->set('fighter_id', null);
-        $occupationCase = $this->findByCoord($coX,$coY);
-
-
-        if(!$occupationCase OR $ignore)
+        $tool = $this->find('all');
+        foreach($tool as $value)
         {
-            $this->set('coordinate_x', $coX);
-            $this->set('coordinate_Y', $coY);
+            //foreach($value as $value2)
+            {
+                if ( $value['Tool']['coordinate_x']==$x AND $value['Tool']['coordinate_y']==$y)
+                {
+                    return $value['Tool']['id'];
+                }
+            }
+            
         }
-        else{
-            do {
 
-                $randomX = (rand() % 15);
-                $randomY = (rand() % 10);
-
-                $occupationCase = $this->find('first', array('conditions' => array(
-                        'coordinate_x' => $randomX,
-                        'coordinate_y' => $randomY,
-                        'fighter_id' => null))
-                );
-            }while($occupationCase != null);
-
-            $this->set('coordinate_x', $randomX);
-            $this->set('coordinate_Y', $randomY);
-        }
+        return null;
     }
 
+   
     //Fonction refaite
     public function equip($fighter_id, $tool_id)
     {
         $tool=$this->read(null, $tool_id);
         $this->set('coordinate_x', -3);
-        $this->set('coordinate_x', -3);
+        $this->set('coordinate_y', -3);
         $this->set('fighter_id', $fighter_id);
         $this->save();
+        $this->equip_fighter($tool_id);
+       
+    }
+    
+    
+    public function equip_fighter($tool_id)
+            
+    {
+        $tool=$this->read(null, $tool_id);
         
-    }
-    
-    function getPositionObjet($notreId)
-    {
-        $datas = $this->read(null, $notreId);
-
-        $Objectnorth = $this->find('first', array(
-                'conditions' => array(
-                    'Tools.coordinate_y' => $datas['Tools']['coordinate_y']+1,
-                    'Tools.coordinate_x' => $datas['Tools']['coordinate_x']
-                )
-            )
-        );
-
-        $Objectsouth = $this->find('first', array(
-                'conditions' => array(
-                    'Tools.coordinate_y' => $datas['Tools']['coordinate_y']-1,
-                    'Tools.coordinate_x' => $datas['Tools']['coordinate_x'])
-            )
-        );
-
-        $Objecteast = $this->find('first', array(
-                'conditions' => array(
-                    'Tools.coordinate_x' => $datas['Tools']['coordinate_x']+1,
-                    'Tools.coordinate_y' => $datas['Tools']['coordinate_y']
-                )
-            )
-        );
-
-        $Objectwest = $this->find('first', array(
-                'conditions' => array(
-                    'Tools.coordinate_x' => $datas['Tools']['coordinate_x']-1,
-                    'Tools.coordinate_y' => $datas['Tools']['coordinate_y']
-                )
-            )
-        );
-        $postionObject = array(
-            'north'=> $Objectnorth,
-            'south'=> $Objectsouth,
-            'east'=> $Objecteast,
-            'west'=> $Objectwest,
-        );
-
-        return $postionObject;
-    }
-    
-    function dorammasage($notreId, $direction)
-    {
-        $datas = $this->read(null, $notreId);
-        $positionObject = $this->getPositionObject($notreId);
-        if ($direction == 'north' || $direction == 'south' || $direction == 'east' || $direction == 'west') {
-
-                if ($positionObject [$direction] != null) 
-                {
-                      $this->equip($notreId); 
-                }
-    
-                
-    
+        // TROUVER TYPE ET BONUS
+        $type = $tool ['Tool']['type'] ;
+        $bonus = $tool ['Tool']['bonus'] ; 
+        
+        switch ($type){
+            case 'life':
+                    $type = 'health';
+                break;
+            case 'force' :
+                    $type = 'strength';
+                break;
+            case 'vue' :
+                    $type = 'sight';
+                break;
         }
-                
+        //UP LE FIGHTER
+        $hdlFig = new Fighter();
+        
+        $fid = $tool['Tool']['fighter_id'];
+      
+        for($i=0;$i<$bonus;$i++)
+            $hdlFig->statsChg($fid, $type);
+        
+
     }
     
-
-} 
+   
+    
+   
+    
+}

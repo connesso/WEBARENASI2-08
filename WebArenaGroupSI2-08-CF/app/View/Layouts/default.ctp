@@ -64,7 +64,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         
                         <div class="button"><?php echo $this->Html->link('Personnage', array('controller' => 'Arenas', 'action' => 'character')); ?></div>
                         <div class="button"><?php echo $this->Html->link('Journal', array('controller' => 'Arenas', 'action' => 'diary')); ?></div>
-                        <div class="button"><?php echo $this->Html->link('Log', array('controller' => 'Arenas', 'action' => 'log')) ;?></div>
+                        
                 </nav>
 		<div id="content">
 
@@ -77,6 +77,14 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <p>WebArenaGoupSI2-08-CF</p>
                     
                     <p>Brunel Vivien Connesson Rémi Grondin Lionel</p>
+                    <p> Nos options : <br>
+                    
+                        A - Gestion avancé des combatants et de leurs équipements<br>
+                        C - Gestion de la limite temporel ( 10s)<br>
+                        G - Utlisation d'une connexion externe Facebook<br>
+                    </p>
+                      
+                        
                     
                     <p><a href = "https://docs.google.com/document/d/1lA-iU6TGZCiYtuwtMvjqqAeuIUpU5vdfRisRhGf6TrU/edit?usp=sharing">Notre fichier Git</a></p>
                     

@@ -10,9 +10,7 @@
             echo $this->Form->input('direction',array('options' => array('north'=>'north','east'=>'east','south'=>'south','west'=>'west'), 'default' => 'east'));
             echo $this->Form->end('Attack');
             
-            echo $this->Form->create('Figherramasse');
-            echo $this->Form->input('direction',array('options' => array('north'=>'north','east'=>'east','south'=>'south','west'=>'west'), 'default' => 'east'));
-            echo $this->Form->end('Ramasser');
+            
             
         ?>
     </div>
@@ -64,7 +62,7 @@
                         $image = "../img/Arenne/Force.png";
                         echo '<img class = "logo"src="'. $image .'">';
                     }
-                    elseif ($plateau[$i][$j]==' ')//Objet Vue
+                    elseif ($plateau[$i][$j]=='V')//Objet Vue
                     {
                         $image = "../img/Arenne/Vue.png";
                         echo '<img class = "logo"src="'. $image .'">';
@@ -115,7 +113,7 @@
            
         </div>
 
-
+     
     </div>
     
 </div>

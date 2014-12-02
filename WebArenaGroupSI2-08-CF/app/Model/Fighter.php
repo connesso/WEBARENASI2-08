@@ -174,7 +174,7 @@ class Fighter extends AppModel {
         $positionEnnemy=$this->getPositionEnnemy($notreId);
         if ($direction == 'north'){ //TEST1
             if($positionEnnemy['north']==null){ //TEST2
-                if($datas['Fighter']['coordinate_y'] != 15) { //TEST3
+                if($datas['Fighter']['coordinate_y'] != 9) { //TEST3
                     $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);$nvlEv['name'] .= 'se deplace ';} else return 'Impossible : frontière.';} else return 'Impossible : case occupé';}
         elseif ($direction == 'south'){
             if($positionEnnemy['south']==null){
@@ -556,6 +556,37 @@ class Fighter extends AppModel {
                     break;
             }
         }
+    }
+    
+        public function statsChg($notreId, $statChoisie)
+    {
+        // RECUPERATION
+        $datas = $this->read(null, $notreId);
+
+        // VALIDATION stock d'xp supérieur à 3        if($datas['Fighter']['xp'] > 3)
+        
+            // En fnction de la stat choisie
+            switch($statChoisie)
+            {
+                case 'health' :
+                    $this->set('current_health', $datas['Fighter']['current_health'] + 3);
+                    $this->set('skill_health', $datas['Fighter']['skill_health'] + 3 );
+                    $this->save();
+                    break;
+                case 'strength' :
+                    $this->set('skill_strength', $datas['Fighter']['skill_strength'] + 1 );
+
+                    $this->save();
+                    break;
+                case 'sight' :
+                    $this->set('skill_sight', $datas['Fighter']['skill_sight'] + 1 );
+
+                    $this->save();
+                    break;
+                default :
+                    break;
+            }
+        
     }
 
 
